@@ -1,0 +1,33 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: 'Tajawal';
+  src: url('/src/assets/fonts/Tajawal-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@layer base {
+  body {
+    @apply bg-gradient-to-b from-white to-green-50 min-h-screen overflow-x-hidden relative;
+    font-family: 'Tajawal', sans-serif;
+  }
+
+  body::before, body::after {
+    content: '';
+    @apply absolute rounded-full filter blur-3xl opacity-20 pointer-events-none;
+  }
+
+  body::before {
+    @apply top-0 left-0 w-72 h-72 bg-green-300;
+    transform: translate(-50%, -50%);
+  }
+
+  body::after {
+    @apply bottom-0 right-0 w-96 h-96 bg-yellow-200;
+    transform: translate(50%, 50%);
+  }
+}
