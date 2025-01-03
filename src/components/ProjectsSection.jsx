@@ -67,7 +67,7 @@ const ProjectsSection = () => {
             <div className="container mx-auto text-center relative px-4">
                 <h2 className="text-4xl font-bold text-center mb-16 text-gray-800">مشاريع بحاجة لدعمكم</h2>
                 <div className="flex items-center justify-between w-full">
-                    <div className="flex items-stretch  rounded-xl border-2 border-gray-300 shadow-sm overflow-hidden w-full min-h-[400px]">
+                    <div className="bg-white flex items-stretch  rounded-xl border-2 border-gray-300 shadow-sm overflow-hidden w-full min-h-[400px]">
                         {/* Left - Image */}
                         <div className="w-2/5 flex-shrink-0">
                             <img
