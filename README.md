@@ -13,7 +13,7 @@ To get started, clone the repository and install the dependencies:
 
 ```bash
 git clone https://github.com/Shady-Akhrass/react-ditq.git
-cd your-repo-name
+cd react-ditq
 npm install
 ```
 
