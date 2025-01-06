@@ -198,7 +198,7 @@ const Navbar = () => {
                             href="https://wa.me/+972592889891"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="bg-green-500 text-white px-4 py-2 rounded-full text-lg hover:bg-green-600"
+                            className="bg-white0 text-white px-4 py-2 rounded-full text-lg hover:bg-green-600"
                         >
                             تبرع لنا
                         </a>

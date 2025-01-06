@@ -51,9 +51,7 @@ function App() {
             <Route path="/news" element={<AllNewsPage />} />
           </Routes>
         </main>
-        <footer className="bg-gray-800 text-white">
-          {/* Add footer content */}
-        </footer>
+        
       </div>
     </Router>
   );

@@ -31,7 +31,7 @@ const GeniusesSection = () => {
         return () => clearInterval(interval);
     }, [geniuses.length, isExpanded]);
 
-    const handleExpand = () => {
+    const handleExpand = (event) => {
         if (cardRef.current) {
             const rect = cardRef.current.getBoundingClientRect();
             setCardPosition({
@@ -52,7 +52,7 @@ const GeniusesSection = () => {
     return (
         <>
             {isExpanded && (
-                <div 
+                <div
                     className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 transition-opacity duration-500"
                     onClick={() => setIsExpanded(false)}
                 />
@@ -61,24 +61,24 @@ const GeniusesSection = () => {
                 <div className="container mx-auto text-center relative px-4">
                     <h2 className="text-4xl font-bold text-center mb-16 text-gray-800">نوابغ الإتقان</h2>
                     <div className="bg-white flex items-center justify-between w-full">
-                        <div 
+                        <div
                             ref={cardRef}
                             onClick={handleExpand}
                             className={`
                                 flex items-stretch rounded-xl border-2 border-gray-300 shadow-lg overflow-hidden
                                 transition-all duration-500 ease-in-out cursor-pointer
-                                ${isExpanded 
+                                ${isExpanded
                                     ? 'fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[90%] h-[70vh] z-50 bg-white'
                                     : 'w-full min-h-[500px] hover:scale-[1.02]'
                                 }
                             `}
                             style={{
-                                transform: isExpanded 
-                                    ? 'translate(-50%, -50%)' 
+                                transform: isExpanded
+                                    ? 'translate(-50%, -50%)'
                                     : 'translate(0, 0)',
                                 transformOrigin: isExpanded
                                     ? '50% 50%'
-                                    : `${cardPosition.left + cardPosition.width/2}px ${cardPosition.top + cardPosition.height/2}px`
+                                    : `${cardPosition.left + cardPosition.width / 2}px ${cardPosition.top + cardPosition.height / 2}px`
                             }}
                         >
                             {!isExpanded && (
@@ -116,14 +116,14 @@ const GeniusesSection = () => {
 
                             <div className={`
                                 transition-all duration-500 ease-out overflow-hidden
-                                ${isExpanded 
+                                ${isExpanded
                                     ? 'absolute top-8 left-1/2 transform -translate-x-1/2 w-40 h-40 rounded-full shadow-xl z-10'
                                     : 'w-2/5 flex-shrink-0'
                                 }
                             `}
                                 style={{
-                                    transform: isExpanded 
-                                        ? 'translate(-50%, 0)' 
+                                    transform: isExpanded
+                                        ? 'translate(-50%, 0)'
                                         : 'translate(0, 0)',
                                 }}
                             >
@@ -132,7 +132,7 @@ const GeniusesSection = () => {
                                     alt={isExpanded ? expandedGenius.name : currentGenius.name}
                                     className={`
                                         transition-all duration-500
-                                        ${isExpanded 
+                                        ${isExpanded
                                             ? 'w-full h-full object-cover rounded-full'
                                             : 'w-full h-full object-cover'
                                         }
@@ -141,7 +141,7 @@ const GeniusesSection = () => {
                             </div>
 
                             {isExpanded && (
-                                <button 
+                                <button
                                     onClick={(e) => {
                                         e.stopPropagation();
                                         setIsExpanded(false);
