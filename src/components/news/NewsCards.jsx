@@ -3,6 +3,7 @@ import axios from 'axios';
 import { IoChevronBackOutline, IoChevronForwardOutline } from 'react-icons/io5';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
+import { useNavigate } from 'react-router-dom';
 
 const AllNewsPage = () => {
     const [news, setNews] = useState([]);
@@ -16,7 +17,8 @@ const AllNewsPage = () => {
             try {
                 const response = await axios.get('https://ditq.org/api/indexAPI');
                 const allNews = response?.data?.newss || [];
-                setNews(allNews.reverse()); // Reverse to show the latest news first
+                setNews(allNews.reverse());
+                localStorage.setItem('allNews', JSON.stringify(allNews));
             } catch (error) {
                 setError("Error fetching news");
             } finally {
@@ -27,8 +29,8 @@ const AllNewsPage = () => {
         fetchNews();
     }, []);
 
-    const generateDetailsUrl = (title) => {
-        return `/itqan/news/${encodeURIComponent(title.replace(/\s+/g, '-'))}/details`;
+    const generateDetailsUrl = (newsItem) => {
+        return `/news/${encodeURIComponent(newsItem.title.replace(/\s+/g, '-'))}`;
     };
 
     const handlePageChange = (pageNumber) => {
@@ -41,12 +43,15 @@ const AllNewsPage = () => {
         return (
             <section className="py-8 pt-24">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <Skeleton height={40} width={300} className="mb-8" />
+                    <h2 className="text-2xl font-bold text-center text-gray-800 mb-8">جميع الأخبار</h2>
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                        <Skeleton height={500} />
-                        <Skeleton height={500} />
-                        <Skeleton height={500} />
-                        <Skeleton height={500} />
+                        {paginatedNews.map((item) => (
+                            <NewsCard
+                                key={item.id}
+                                newsItem={item}
+                                generateDetailsUrl={() => generateDetailsUrl(item)}
+                            />
+                        ))}
                     </div>
                 </div>
             </section>
@@ -58,16 +63,18 @@ const AllNewsPage = () => {
     }
 
     return (
-        <section className=" py-8 pt-24">
+        <section className="py-8 pt-24">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <h2 className="text-2xl font-bold text-center text-gray-800 mb-8">جميع الأخبار</h2>
-                {/* Grid layout for news cards */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                     {paginatedNews.map((item) => (
-                        <NewsCard key={item.id} newsItem={item} generateDetailsUrl={generateDetailsUrl} />
+                        <NewsCard
+                            key={item.id}
+                            newsItem={item}
+                            generateDetailsUrl={() => generateDetailsUrl(item)}
+                        />
                     ))}
                 </div>
-                {/* Enhanced Pagination controls */}
                 <div className="flex justify-center items-center gap-2 mt-8">
                     <button
                         onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
@@ -82,8 +89,8 @@ const AllNewsPage = () => {
                             key={index}
                             onClick={() => handlePageChange(index + 1)}
                             className={`w-10 h-10 flex items-center justify-center rounded-lg ${currentPage === index + 1
-                                    ? 'bg-green-500 text-white'
-                                    : 'bg-white text-gray-700 hover:bg-gray-100'
+                                ? 'bg-green-500 text-white'
+                                : 'bg-white text-gray-700 hover:bg-gray-100'
                                 }`}
                         >
                             {index + 1}
@@ -103,12 +110,19 @@ const AllNewsPage = () => {
     );
 };
 
-// News Card as a separate component
 const NewsCard = ({ newsItem, generateDetailsUrl }) => {
+    const navigate = useNavigate();
+
+    const handleClick = () => {
+        navigate(generateDetailsUrl());
+    };
+
     return (
-        <a
-            href={generateDetailsUrl(newsItem.title)}
-            className="block bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 ease-in-out overflow-hidden h-[500px] flex flex-col"
+        <div
+            onClick={handleClick}
+            className="block bg-white rounded-lg shadow-md hover:shadow-lg 
+                transition-all duration-300 ease-in-out overflow-hidden h-[500px] 
+                flex flex-col cursor-pointer transform hover:-translate-y-1"
         >
             <div className="h-[50%]">
                 <img
@@ -124,7 +138,7 @@ const NewsCard = ({ newsItem, generateDetailsUrl }) => {
                     عرض التفاصيل
                 </button>
             </div>
-        </a>
+        </div>
     );
 };
 

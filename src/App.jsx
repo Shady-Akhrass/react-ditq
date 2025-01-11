@@ -12,12 +12,13 @@ import SoundSection from './components/SoundSection';
 import SliderSection from './components/SliderSection';
 import Header from './components/Header';
 import AllNewsPage from './components/news/NewsCards'; // Import the AllNewsPage component
+import NewsDetails from './components/news/NewsDetails'; // Import the NewsDetails component
 
 function App() {
   return (
     <Router>
       <div className="font-sans leading-normal tracking-normal">
-        <Header /> {/* Ensure Header does NOT include a Router */}
+        <Header />
         <main>
           <Routes>
             <Route
@@ -28,6 +29,7 @@ function App() {
                   <NewsSection />
                   <MessageSection />
                   <YouTubeSection />
+                  {/* <AchievementsSection /> */}
                   <GeniusesSection />
                   <ProjectsSection />
                   <SoundSection />
@@ -42,6 +44,7 @@ function App() {
                   <NewsSection />
                   <MessageSection />
                   <YouTubeSection />
+                  {/* <AchievementsSection /> */}
                   <GeniusesSection />
                   <ProjectsSection />
                   <SoundSection />
@@ -49,9 +52,11 @@ function App() {
               }
             />
             <Route path="/news" element={<AllNewsPage />} />
+            <Route path="/news/:title/details" element={<NewsDetails />} />
+            <Route path="/news/:id/details" element={<NewsDetails />} />
           </Routes>
         </main>
-        
+
       </div>
     </Router>
   );

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
+import { Helmet } from 'react-helmet';
 
 const ProjectsSection = () => {
     const [projects, setProjects] = useState([]);
@@ -63,54 +64,68 @@ const ProjectsSection = () => {
     const currentProject = projects[currentIndex];
 
     return (
-        <section className="relative py-16 min-h-screen overflow-hidden" dir="rtl">
-            <div className="container mx-auto text-center relative px-4">
-                <h2 className="text-4xl font-bold text-center mb-16 text-gray-800">مشاريع بحاجة لدعمكم</h2>
-                <div className="flex items-center justify-between w-full">
-                    <div className="bg-white flex items-stretch  rounded-xl border-2 border-gray-300 shadow-sm overflow-hidden w-full min-h-[400px]">
-                        {/* Left - Image */}
-                        <div className="w-2/5 flex-shrink-0">
-                            <img
-                                src={currentProject?.image || 'placeholder-image-url'}
-                                alt={currentProject?.title || 'Project image'}
-                                className="w-full h-full object-cover"
-                            />
-                        </div>
+        <>
+            <Helmet>
+                <title>Projects - Your Website</title>
+                <meta name="description" content="Description of your website's projects section." />
+                <meta property="og:title" content="Projects - Your Website" />
+                <meta property="og:description" content="Description of your website's projects section." />
+                <meta property="og:image" content="URL_to_image" />
+                <meta property="og:url" content="URL_to_page" />
+                <meta name="twitter:card" content="summary_large_image" />
+                <meta name="twitter:title" content="Projects - Your Website" />
+                <meta name="twitter:description" content="Description of your website's projects section." />
+                <meta name="twitter:image" content="URL_to_image" />
+            </Helmet>
+            <section className="relative py-16 min-h-screen overflow-hidden" dir="rtl">
+                <div className="container mx-auto text-center relative px-4">
+                    <h2 className="text-4xl font-bold text-center mb-16 text-gray-800">مشاريع بحاجة لدعمكم</h2>
+                    <div className="flex items-center justify-between w-full">
+                        <div className="bg-white flex items-stretch  rounded-xl border-2 border-gray-300 shadow-sm overflow-hidden w-full min-h-[400px]">
+                            {/* Left - Image */}
+                            <div className="w-2/5 flex-shrink-0">
+                                <img
+                                    src={currentProject?.image || 'placeholder-image-url'}
+                                    alt={currentProject?.title || 'Project image'}
+                                    className="w-full h-full object-cover"
+                                />
+                            </div>
 
-                        {/* Middle - Content */}
-                        <div className="flex-grow flex flex-col justify-center items-center p-10">
-                            <div className="text-center max-w-xl">
-                                <h3 className="font-semibold text-2xl mb-6">{currentProject?.title || 'Loading title...'}</h3>
-                                <p className="text-base text-gray-600 mb-8">{currentProject?.details || 'Loading details...'}</p>
-                                <div className="w-48 bg-yellow-500 text-white text-center py-4 rounded-lg hover:bg-yellow-600 transition-colors mx-auto">
-                                    <a
-                                        href={`/itqan/project/${currentProject?.title?.replace(/\s+/g, '-') || ''}/details`}
-                                        className="text-base font-medium block"
-                                    >
-                                        عرض التفاصيل
-                                    </a>
+                            {/* Middle - Content */}
+                            <div className="flex-grow flex flex-col justify-center items-center p-10">
+                                <div className="text-center max-w-xl">
+                                    <h3 className="font-semibold text-2xl mb-6">{currentProject?.title || 'Loading title...'}</h3>
+                                    <p className="text-base text-gray-600 mb-8">{currentProject?.details || 'Loading details...'}</p>
+                                    <div className="w-48 bg-yellow-500 text-white text-center py-4 rounded-lg hover:bg-yellow-600 transition-colors mx-auto">
+                                        <a
+                                            href={`/itqan/project/${currentProject?.title?.replace(/\s+/g, '-') || ''}/details`}
+                                            className="text-base font-medium block"
+                                        >
+                                            عرض التفاصيل
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                        {/* Right - Navigation Dots */}
-                        <div className="flex flex-col justify-center gap-3 px-8">
-                            {projects.map((_, index) => (
-                                <button
-                                    key={index}
-                                    onClick={() => goToSlide(index)}
-                                    className={`w-3 h-3 rounded-full transition-all duration-300 ${currentIndex === index
-                                        ? 'bg-yellow-300 w-4 h-4'
-                                        : 'bg-yellow-50/100'
-                                        }`}
-                                    aria-label={`Go to slide ${index + 1}`}
-                                />
-                            ))}
+                            {/* Right - Navigation Dots */}
+                            <div className="flex flex-col justify-center gap-3 px-8">
+                                {projects.map((_, index) => (
+                                    <button
+                                        key={index}
+                                        onClick={() => goToSlide(index)}
+                                        className={`w-3 h-3 rounded-full transition-all duration-300 ${currentIndex === index
+                                            ? 'bg-yellow-300 w-4 h-4'
+                                            : 'bg-yellow-50/100'
+                                            }`}
+                                        aria-label={`Go to slide ${index + 1}`}
+                                    />
+                                ))}
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </section>
+            </section>
+        </>
     );
 };
 

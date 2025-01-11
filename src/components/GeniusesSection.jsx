@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
+import { Helmet } from 'react-helmet';
 
 const GeniusesSection = () => {
     const [geniuses, setGeniuses] = useState([]);
@@ -8,6 +9,7 @@ const GeniusesSection = () => {
     const [expandedGenius, setExpandedGenius] = useState(null);
     const cardRef = useRef(null);
     const [cardPosition, setCardPosition] = useState({ top: 0, left: 0, width: 0, height: 0 });
+    const [clickPosition, setClickPosition] = useState({ x: 0, y: 0 });
 
     useEffect(() => {
         fetch('https://ditq.org/api/indexAPI')
@@ -32,15 +34,17 @@ const GeniusesSection = () => {
     }, [geniuses.length, isExpanded]);
 
     const handleExpand = (event) => {
-        if (cardRef.current) {
-            const rect = cardRef.current.getBoundingClientRect();
-            setCardPosition({
-                top: rect.top,
-                left: rect.left,
-                width: rect.width,
-                height: rect.height
-            });
-        }
+        const rect = cardRef.current.getBoundingClientRect();
+        const x = event.clientX - rect.left;
+        const y = event.clientY - rect.top;
+        
+        setClickPosition({ x, y });
+        setCardPosition({
+            top: rect.top,
+            left: rect.left,
+            width: rect.width,
+            height: rect.height
+        });
         setExpandedGenius(currentGenius);
         setIsExpanded(true);
     };
@@ -51,6 +55,18 @@ const GeniusesSection = () => {
 
     return (
         <>
+            <Helmet>
+                <title>Geniuses - Your Website</title>
+                <meta name="description" content="Description of your website's geniuses section." />
+                <meta property="og:title" content="Geniuses - Your Website" />
+                <meta property="og:description" content="Description of your website's geniuses section." />
+                <meta property="og:image" content="URL_to_image" />
+                <meta property="og:url" content="URL_to_page" />
+                <meta name="twitter:card" content="summary_large_image" />
+                <meta name="twitter:title" content="Geniuses - Your Website" />
+                <meta name="twitter:description" content="Description of your website's geniuses section." />
+                <meta name="twitter:image" content="URL_to_image" />
+            </Helmet>
             {isExpanded && (
                 <div
                     className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 transition-opacity duration-500"
@@ -61,24 +77,25 @@ const GeniusesSection = () => {
                 <div className="container mx-auto text-center relative px-4">
                     <h2 className="text-4xl font-bold text-center mb-16 text-gray-800">نوابغ الإتقان</h2>
                     <div className="bg-white flex items-center justify-between w-full">
-                        <div
+                        <div 
                             ref={cardRef}
                             onClick={handleExpand}
                             className={`
                                 flex items-stretch rounded-xl border-2 border-gray-300 shadow-lg overflow-hidden
-                                transition-all duration-500 ease-in-out cursor-pointer
-                                ${isExpanded
-                                    ? 'fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[90%] h-[70vh] z-50 bg-white'
+                                transition-all duration-500 ease-in-out cursor-pointer origin-center
+                                ${isExpanded 
+                                    ? 'fixed top-1/2 left-1/2 w-[90%] h-[70vh] z-50 bg-white'
                                     : 'w-full min-h-[500px] hover:scale-[1.02]'
                                 }
                             `}
                             style={{
-                                transform: isExpanded
-                                    ? 'translate(-50%, -50%)'
-                                    : 'translate(0, 0)',
+                                transform: isExpanded 
+                                    ? 'translate(-50%, -50%) scale(1)' 
+                                    : 'translate(0, 0) scale(1)',
                                 transformOrigin: isExpanded
-                                    ? '50% 50%'
-                                    : `${cardPosition.left + cardPosition.width / 2}px ${cardPosition.top + cardPosition.height / 2}px`
+                                    ? `${clickPosition.x}px ${clickPosition.y}px`
+                                    : 'center',
+                                transition: 'all 500ms cubic-bezier(0.4, 0, 0.2, 1)'
                             }}
                         >
                             {!isExpanded && (

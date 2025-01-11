@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
+import { Helmet } from 'react-helmet';
 
 const NewsSection = () => {
     const [news, setNews] = useState([]);
@@ -31,6 +32,18 @@ const NewsSection = () => {
     if (loading) {
         return (
             <section className="py-8">
+                <Helmet>
+                    <title>News - Your Website</title>
+                    <meta name="description" content="Description of your website's news section." />
+                    <meta property="og:title" content="News - Your Website" />
+                    <meta property="og:description" content="Description of your website's news section." />
+                    <meta property="og:image" content="URL_to_image" />
+                    <meta property="og:url" content="URL_to_page" />
+                    <meta name="twitter:card" content="summary_large_image" />
+                    <meta name="twitter:title" content="News - Your Website" />
+                    <meta name="twitter:description" content="Description of your website's news section." />
+                    <meta name="twitter:image" content="URL_to_image" />
+                </Helmet>
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <Skeleton height={40} width={300} className="mb-16" />
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -50,6 +63,18 @@ const NewsSection = () => {
 
     return (
         <section className="py-8">
+            <Helmet>
+                <title>News - Your Website</title>
+                <meta name="description" content="Description of your website's news section." />
+                <meta property="og:title" content="News - Your Website" />
+                <meta property="og:description" content="Description of your website's news section." />
+                <meta property="og:image" content="URL_to_image" />
+                <meta property="og:url" content="URL_to_page" />
+                <meta name="twitter:card" content="summary_large_image" />
+                <meta name="twitter:title" content="News - Your Website" />
+                <meta name="twitter:description" content="Description of your website's news section." />
+                <meta name="twitter:image" content="URL_to_image" />
+            </Helmet>
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <h2 className="text-4xl font-bold text-center mb-16 text-gray-800">أخبار الدار</h2>
                 {/* Grid layout for news cards */}

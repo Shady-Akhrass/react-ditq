@@ -9,6 +9,7 @@ const AchievementsSection = () => {
             .then((response) => {
                 // Assuming achievements are under 'achievements'
                 setAchievements(response.data.achievements);
+                console.log(response.data.achievements);
             })
             .catch((error) => {
                 console.error("Error fetching achievements:", error);
