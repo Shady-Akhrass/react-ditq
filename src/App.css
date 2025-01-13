@@ -98,3 +98,6 @@ body::after {
   @apply bg-white/50 w-full h-[3px] rounded-full;
   /* Normal dot style */
 }
+.carousel .slide {
+  transition: opacity 0.5s ease-in-out !important;
+}

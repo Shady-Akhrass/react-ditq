@@ -13,6 +13,7 @@ import SliderSection from './components/SliderSection';
 import Header from './components/Header';
 import AllNewsPage from './components/news/NewsCards'; // Import the AllNewsPage component
 import NewsDetails from './components/news/NewsDetails'; // Import the NewsDetails component
+import ActivitiesSection from './components/ActivitiesSection'; // Import the ActivitiesSection component
 
 function App() {
   return (
@@ -52,11 +53,12 @@ function App() {
               }
             />
             <Route path="/news" element={<AllNewsPage />} />
-            <Route path="/news/:title/details" element={<NewsDetails />} />
-            <Route path="/news/:id/details" element={<NewsDetails />} />
+            {/* <Route path="/news/:title/details" element={<NewsDetails />} />
+            <Route path="/news/:id/details" element={<NewsDetails />} /> */}
+            <Route path="/news/:id/:title" element={<NewsDetails />} />
+            <Route path="/activities-section" element={<ActivitiesSection />} />
           </Routes>
         </main>
-
       </div>
     </Router>
   );

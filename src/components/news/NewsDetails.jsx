@@ -55,18 +55,12 @@ const NewsDetails = () => {
             try {
                 // First try to get from localStorage
                 const cachedNews = JSON.parse(localStorage.getItem('allNews') || '[]');
-                const decodedTitle = decodeURIComponent(title.replace(/-/g, ' '));
 
                 if (cachedNews.length > 0) {
-                    const currentNews = cachedNews.find(news =>
-                        news.title.toLowerCase() === decodedTitle.toLowerCase()
-                    );
-
+                    const currentNews = cachedNews.find(news => news.id.toString() === id.toString());
                     if (currentNews) {
                         setNewsItem(currentNews);
-                        const currentIndex = cachedNews.findIndex(news =>
-                            news.title.toLowerCase() === decodedTitle.toLowerCase()
-                        );
+                        const currentIndex = cachedNews.findIndex(news => news.id.toString() === id.toString());
                         if (currentIndex > 0) {
                             setPrevNews(cachedNews[currentIndex - 1]);
                         }
@@ -78,17 +72,13 @@ const NewsDetails = () => {
                     // Fallback to API
                     const response = await axios.get('https://ditq.org/api/indexAPI');
                     const allNews = response?.data?.newss || [];
-                    const currentNews = allNews.find(news =>
-                        news.title.toLowerCase() === decodedTitle.toLowerCase()
-                    );
+                    const currentNews = allNews.find(news => news.id.toString() === id.toString());
 
                     if (currentNews) {
                         setNewsItem(currentNews);
                         localStorage.setItem('allNews', JSON.stringify(allNews));
 
-                        const currentIndex = allNews.findIndex(news =>
-                            news.title.toLowerCase() === decodedTitle.toLowerCase()
-                        );
+                        const currentIndex = allNews.findIndex(news => news.id.toString() === id.toString());
                         if (currentIndex > 0) {
                             setPrevNews(allNews[currentIndex - 1]);
                         }
@@ -106,15 +96,14 @@ const NewsDetails = () => {
         };
 
         fetchNewsDetails();
-    }, [title]);
+    }, [id]);
 
     const generateNewsUrl = (newsItem) => {
-        return `/news/${encodeURIComponent(newsItem.title.replace(/\s+/g, '-'))}/details`;
+        return `/news/${newsItem.id}/${encodeURIComponent(newsItem.title.replace(/\s+/g, '-'))}`;
     };
-    
 
     const copyShortLink = () => {
-        const shortUrl = `${window.location.origin}/news/${newsItem.id}/details`;
+        const shortUrl = window.location.href;
         navigator.clipboard.writeText(shortUrl);
         setCopySuccess(true);
         setTimeout(() => setCopySuccess(false), 3000);
@@ -265,27 +254,27 @@ const NewsDetails = () => {
 
                         <div className="mt-8" dir='rtl'>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                {prevNews && (
+                                {nextNews && (
                                     <Link
-                                        to={generateNewsUrl(prevNews)}
+                                        to={generateNewsUrl(nextNews)}
                                         className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-all flex items-center group h-24"
                                     >
                                         <ChevronRight className="w-5 h-5 ml-2 text-green-600 transform group-hover:-translate-x-1 transition-transform" />
                                         <div>
                                             <p className="text-sm text-gray-500">الخبر السابق</p>
-                                            <p className="text-gray-900 font-semibold">{prevNews.title}</p>
+                                            <p className="text-gray-900 font-semibold">{nextNews.title}</p>
                                         </div>
                                     </Link>
                                 )}
 
-                                {nextNews && (
+                                {prevNews && (
                                     <Link
-                                        to={generateNewsUrl(nextNews)}
+                                        to={generateNewsUrl(prevNews)}
                                         className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-all flex items-center justify-end group h-24"
                                     >
                                         <div className="text-left">
                                             <p className="text-sm text-gray-500">الخبر التالي</p>
-                                            <p className="text-gray-900 font-semibold">{nextNews.title}</p>
+                                            <p className="text-gray-900 font-semibold">{prevNews.title}</p>
                                         </div>
                                         <ChevronLeft className="w-5 h-5 mr-2 text-green-600 transform group-hover:translate-x-1 transition-transform" />
                                     </Link>

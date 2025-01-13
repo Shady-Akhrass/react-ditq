@@ -168,7 +168,7 @@ const Navbar = () => {
                                         </li>
                                         <li>
                                             <Link
-                                                to="/activity"
+                                                to="/activities-section"
                                                 className={`block px-4 py-2 text-sm hover:bg-gray-100 ${selectedItem === 'activity' ? 'bg-green-100 text-green-600' : ''}`}
                                                 onClick={() => handleItemClick('activity')}
                                             >

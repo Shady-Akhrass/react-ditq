@@ -26,12 +26,12 @@ const NewsSection = () => {
     }, []);
 
     const generateDetailsUrl = (title) => {
-        return `/itqan/news/${encodeURIComponent(title.replace(/\s+/g, '-'))}/details`;
+        return `/news/${encodeURIComponent(title.replace(/\s+/g, '-'))}/details`;
     };
 
     if (loading) {
         return (
-            <section className="py-8">
+            <section className="py-8 ">
                 <Helmet>
                     <title>News - Your Website</title>
                     <meta name="description" content="Description of your website's news section." />
