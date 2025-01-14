@@ -3,7 +3,8 @@ import axios from 'axios';
 import { IoChevronBackOutline, IoChevronForwardOutline } from 'react-icons/io5';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link  } from 'react-router-dom';
+import { ChevronLeft, Home } from 'lucide-react';
 
 const AllNewsPage = () => {
     const [news, setNews] = useState([]);
@@ -62,14 +63,26 @@ const AllNewsPage = () => {
 
     return (
         <section className="py-8 pt-24">
+            <div className="max-w-7xl mx-auto mb-6" dir='rtl'>
+                <nav className="flex items-center text-gray-600 text-sm">
+                    <Link to="/" className="flex items-center hover:text-green-600">
+                        <Home className="w-4 h-4 ml-1" />
+                        الرئيسية
+                    </Link>
+                    <ChevronLeft className="w-4 h-4 mx-2" />
+                    <span className="text-green-600">
+                        كافة الأخبار
+                    </span>
+                </nav>
+            </div>
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <h2 className="text-2xl font-bold text-center text-gray-800 mb-8">جميع الأخبار</h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                     {paginatedNews.map((item) => (
-                        <NewsCard 
-                            key={item.id} 
-                            newsItem={item} 
-                            generateDetailsUrl={() => generateDetailsUrl(item)} 
+                        <NewsCard
+                            key={item.id}
+                            newsItem={item}
+                            generateDetailsUrl={() => generateDetailsUrl(item)}
                         />
                     ))}
                 </div>
@@ -86,11 +99,10 @@ const AllNewsPage = () => {
                         <button
                             key={index}
                             onClick={() => handlePageChange(index + 1)}
-                            className={`w-10 h-10 flex items-center justify-center rounded-lg ${
-                                currentPage === index + 1
-                                    ? 'bg-green-500 text-white'
-                                    : 'bg-white text-gray-700 hover:bg-gray-100'
-                            }`}
+                            className={`w-10 h-10 flex items-center justify-center rounded-lg ${currentPage === index + 1
+                                ? 'bg-green-500 text-white'
+                                : 'bg-white text-gray-700 hover:bg-gray-100'
+                                }`}
                         >
                             {index + 1}
                         </button>

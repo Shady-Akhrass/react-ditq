@@ -20,50 +20,28 @@ const carouselStyles = `
   }
 `;
 
-const ActivitiesSection = () => {
-    const [activities, setActivities] = useState([]);
+const DiwanSection = () => {
+    const [diwans, setDiwans] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        const loadFacebookSDK = () => {
-            window.fbAsyncInit = function () {
-                window.FB.init({
-                    appId: 'YOUR_FACEBOOK_APP_ID',
-                    xfbml: true,
-                    version: 'v18.0'
-                });
-            };
-
-            (function (d, s, id) {
-                var js, fjs = d.getElementsByTagName(s)[0];
-                if (d.getElementById(id)) return;
-                js = d.createElement(s); js.id = id;
-                js.src = "https://connect.facebook.net/ar_AR/sdk.js";
-                fjs.parentNode.insertBefore(js, fjs);
-            }(document, 'script', 'facebook-jssdk'));
-        };
-
-        loadFacebookSDK();
-    }, []);
-
-    useEffect(() => {
-        axios.get('https://ditq.org/api/activity/API')
+        axios.get('https://ditq.org/api/diwan/API')
             .then(response => {
-                const activitiesData = Array.isArray(response.data) ? response.data : [response.data];
-                setActivities(activitiesData);
+                const diwanData = Array.isArray(response.data) ? response.data : [response.data];
+                setDiwans(diwanData);
                 setLoading(false);
             })
             .catch(error => {
-                console.error('There was an error fetching the activities!', error);
-                setError('Failed to load activities');
+                console.error('There was an error fetching the diwan!', error);
+                setError('Failed to load diwan');
                 setLoading(false);
             });
     }, []);
 
     if (loading) return <div>Loading...</div>;
     if (error) return <div>{error}</div>;
-    if (!activities?.length) return <div>No activities found</div>;
+    if (!diwans?.length) return <div>No diwan found</div>;
 
     return (
         <div className="min-h-screen py-24 px-4 sm:px-6 lg:px-8">
@@ -78,7 +56,7 @@ const ActivitiesSection = () => {
                     </Link>
                     <ChevronLeft className="w-4 h-4 mx-2" />
                     <span className="text-green-600">
-                        الأنشطة والمسابقات
+                        قسم ديوان الحفاظ
                     </span>
                 </nav>
             </div>
@@ -111,12 +89,12 @@ const ActivitiesSection = () => {
                     </div>
                 </div>
 
-                {/* Activities Content */}
+                {/* Diwan Content */}
                 <div className="lg:col-span-3 order-1 lg:order-2">
-                    <h2 className="text-3xl font-bold mb-8 text-right">قسم الأنشطة والمسابقات</h2>
-                    {activities.map(activity => (
-                        <div key={activity.id} className="bg-white rounded-xl shadow-sm overflow-hidden mb-8">
-                            {activity.activities_images && activity.activities_images.length > 0 && (
+                    <h2 className="text-3xl font-bold mb-8 text-center">قسم ديوان الحفاظ</h2>
+                    {diwans.map(diwan => (
+                        <div key={diwan.id} className="bg-white rounded-xl shadow-sm overflow-hidden mb-8">
+                            {diwan.diwan_images && diwan.diwan_images.length > 0 && (
                                 <Carousel
                                     showThumbs={false}
                                     showStatus={false}
@@ -130,11 +108,11 @@ const ActivitiesSection = () => {
                                     emulateTouch
                                     className="aspect-video"
                                 >
-                                    {activity.activities_images.map(image => (
+                                    {diwan.diwan_images.map(image => (
                                         <div key={image.id} className="relative aspect-video">
                                             <img
                                                 src={`https://ditq.org/storage/${image.image}`}
-                                                alt="Activity"
+                                                alt="Diwan"
                                                 className="w-full h-full object-cover"
                                             />
                                         </div>
@@ -143,7 +121,7 @@ const ActivitiesSection = () => {
                             )}
                             <div className="p-6">
                                 <p className="text-gray-800 text-right leading-relaxed">
-                                    {activity.activities[0].about}
+                                    {diwan.diwans[0].about}
                                 </p>
                             </div>
                         </div>
@@ -154,4 +132,4 @@ const ActivitiesSection = () => {
     );
 };
 
-export default ActivitiesSection;
+export default DiwanSection;

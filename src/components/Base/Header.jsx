@@ -3,7 +3,7 @@ import { Link, NavLink } from 'react-router-dom';
 import { FaBars, FaTimes, FaChevronDown } from 'react-icons/fa';
 import { FiSearch } from 'react-icons/fi';
 import { Helmet } from 'react-helmet';
-import Logo from '../../public/logo.png';
+import Logo from '../../../public/logo.png';
 
 const Navbar = () => {
     const [navOpen, setNavOpen] = useState(false);
@@ -132,7 +132,7 @@ const Navbar = () => {
                                     <ul className="absolute right-0 mt-2 w-56 bg-white shadow-lg rounded-lg py-2 z-10">
                                         <li>
                                             <Link
-                                                to="/memorization"
+                                                to="/memorization-section"
                                                 className={`block px-4 py-2 text-sm hover:bg-gray-100 ${selectedItem === 'memorization' ? 'bg-green-100 text-green-600' : ''}`}
                                                 onClick={() => handleItemClick('memorization')}
                                             >
@@ -141,7 +141,7 @@ const Navbar = () => {
                                         </li>
                                         <li>
                                             <Link
-                                                to="/course"
+                                                to="/courses-section"
                                                 className={`block px-4 py-2 text-sm hover:bg-gray-100 ${selectedItem === 'course' ? 'bg-green-100 text-green-600' : ''}`}
                                                 onClick={() => handleItemClick('course')}
                                             >
@@ -150,7 +150,7 @@ const Navbar = () => {
                                         </li>
                                         <li>
                                             <Link
-                                                to="/diwan"
+                                                to="/diwan-section"
                                                 className={`block px-4 py-2 text-sm hover:bg-gray-100 ${selectedItem === 'diwan' ? 'bg-green-100 text-green-600' : ''}`}
                                                 onClick={() => handleItemClick('diwan')}
                                             >
@@ -159,7 +159,7 @@ const Navbar = () => {
                                         </li>
                                         <li>
                                             <Link
-                                                to="/creative"
+                                                to="/creatives-section"
                                                 className={`block px-4 py-2 text-sm hover:bg-gray-100 ${selectedItem === 'creative' ? 'bg-green-100 text-green-600' : ''}`}
                                                 onClick={() => handleItemClick('creative')}
                                             >
