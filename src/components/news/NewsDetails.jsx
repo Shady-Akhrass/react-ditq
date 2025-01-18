@@ -127,7 +127,7 @@ const NewsDetails = () => {
 
     if (!newsItem) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-gray-50">
+            <div className="min-h-screen flex items-center justify-center">
                 <div className="bg-white p-8 rounded-lg shadow-lg text-center">
                     <div className="text-red-500 text-xl mb-4">⚠️</div>
                     <h2 className="text-xl font-semibold text-gray-800">لم يتم العثور على الخبر</h2>
@@ -146,7 +146,7 @@ const NewsDetails = () => {
     return (
         <>
             <style>{carouselStyles}</style>
-            <div className="min-h-screen py-24 px-4 sm:px-6 lg:px-8">
+            <div className="min-h-screen py-24 px-4 sm:px-6 lg:px-8 ">
                 <div className="max-w-7xl mx-auto mb-6" dir='rtl'>
                     <nav className="flex items-center text-gray-600 text-sm">
                         <Link to="/" className="flex items-center hover:text-green-600">
@@ -216,10 +216,10 @@ const NewsDetails = () => {
                         </div>
 
                         <div className="bg-white rounded-xl shadow-sm overflow-hidden">
-                            <div className="p-6 border-b border-gray-100">
-                                <h1 className="text-3xl font-bold text-right text-gray-900 leading-tight">
+                            <div className="p-6 border-b border-gray-100" dir='rtl'>
+                                <p className="text-3xl font-bold text-right text-gray-900 leading-tight">
                                     {newsItem.title}
-                                </h1>
+                                </p>
                             </div>
 
                             <Carousel showThumbs={false} showStatus={false} infiniteLoop useKeyboardArrows>
@@ -242,14 +242,23 @@ const NewsDetails = () => {
                             </Carousel>
 
                             <div className="p-6">
-                                <div className="prose prose-lg max-w-none">
+                                <div className=" max-w-none font-sans !font-sans text-lg md:text-xl !text-lg">
                                     {newsItem.object.split('\r\n\r\n').map((paragraph, index) => (
-                                        <p key={index} className="text-gray-800 leading-relaxed text-right mb-4">
-                                            {paragraph}
-                                        </p>
+                                        <pre
+                                            key={index}
+                                            className="block w-full overflow-auto whitespace-pre-line my-4 rtl font-sans !font-sans text-lg md:text-xl !text-lg"
+                                        >
+                                            <p
+                                                dir="rtl"
+                                                className="text-gray-800 leading-relaxed font-sans !font-san text-lg md:text-xl !text-lg"
+                                            >
+                                                {paragraph}
+                                            </p>
+                                        </pre>
                                     ))}
                                 </div>
                             </div>
+
                         </div>
 
                         <div className="mt-8" dir='rtl'>

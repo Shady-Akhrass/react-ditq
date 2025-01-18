@@ -41,9 +41,28 @@ const ImageSlider = () => {
 
     return (
         <section className="relative w-full h-auto">
-            <div className="w-full h-screen overflow-hidden">
+            {/* Mobile View */}
+            <div className="block md:hidden w-full h-[50vh]">
                 {loading ? (
-                    // Skeleton loader when the images are being fetched
+                    <div className="flex justify-center items-center h-full w-full">
+                        <div className="w-full h-full bg-gray-300 animate-pulse"></div>
+                    </div>
+                ) : (
+                    images[0] && (
+                        <div className="w-full h-full">
+                            <img
+                                src={images[0].image}
+                                alt="Featured Image"
+                                className="w-full h-full object-cover"
+                            />
+                        </div>
+                    )
+                )}
+            </div>
+
+            {/* Desktop Slider */}
+            <div className="hidden md:block w-full h-screen overflow-hidden">
+                {loading ? (
                     <div className="flex justify-center items-center h-full w-full">
                         <div className="w-full h-full bg-gray-300 animate-pulse"></div>
                     </div>
@@ -62,7 +81,6 @@ const ImageSlider = () => {
                 )}
             </div>
         </section>
-
     );
 };
 

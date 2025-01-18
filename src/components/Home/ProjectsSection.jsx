@@ -66,7 +66,7 @@ const ProjectsSection = () => {
     return (
         <>
             <Helmet>
-                <title>Projects - Your Website</title>
+                {/* <title>Projects - Your Website</title> */}
                 <meta name="description" content="Description of your website's projects section." />
                 <meta property="og:title" content="Projects - Your Website" />
                 <meta property="og:description" content="Description of your website's projects section." />

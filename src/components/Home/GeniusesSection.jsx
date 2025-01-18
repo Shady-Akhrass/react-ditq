@@ -37,7 +37,7 @@ const GeniusesSection = () => {
         const rect = cardRef.current.getBoundingClientRect();
         const x = event.clientX - rect.left;
         const y = event.clientY - rect.top;
-        
+
         setClickPosition({ x, y });
         setCardPosition({
             top: rect.top,
@@ -56,7 +56,7 @@ const GeniusesSection = () => {
     return (
         <>
             <Helmet>
-                <title>Geniuses - Your Website</title>
+                {/* <title>Geniuses - Your Website</title> */}
                 <meta name="description" content="Description of your website's geniuses section." />
                 <meta property="og:title" content="Geniuses - Your Website" />
                 <meta property="og:description" content="Description of your website's geniuses section." />
@@ -77,20 +77,20 @@ const GeniusesSection = () => {
                 <div className="container mx-auto text-center relative px-4">
                     <h2 className="text-4xl font-bold text-center mb-16 text-gray-800">نوابغ الإتقان</h2>
                     <div className="bg-white flex items-center justify-between w-full">
-                        <div 
+                        <div
                             ref={cardRef}
                             onClick={handleExpand}
                             className={`
                                 flex items-stretch rounded-xl border-2 border-gray-300 shadow-lg overflow-hidden
                                 transition-all duration-500 ease-in-out cursor-pointer origin-center
-                                ${isExpanded 
+                                ${isExpanded
                                     ? 'fixed top-1/2 left-1/2 w-[90%] h-[70vh] z-50 bg-white'
                                     : 'w-full min-h-[500px] hover:scale-[1.02]'
                                 }
                             `}
                             style={{
-                                transform: isExpanded 
-                                    ? 'translate(-50%, -50%) scale(1)' 
+                                transform: isExpanded
+                                    ? 'translate(-50%, -50%) scale(1)'
                                     : 'translate(0, 0) scale(1)',
                                 transformOrigin: isExpanded
                                     ? `${clickPosition.x}px ${clickPosition.y}px`

@@ -12,13 +12,14 @@
 
 @layer base {
   body {
-    @apply bg-gradient-to-b from-white to-green-50 min-h-screen overflow-x-hidden relative;
+    @apply bg-gradient-to-b from-white to-green-50 min-h-screen overflow-x-hidden relative flex flex-col;
     font-family: 'Tajawal', sans-serif;
   }
 
   body::before, body::after {
     content: '';
     @apply absolute rounded-full filter blur-3xl opacity-20 pointer-events-none;
+    z-index: 0;
   }
 
   body::before {
@@ -28,6 +29,6 @@
 
   body::after {
     @apply bottom-0 right-0 w-96 h-96 bg-yellow-200;
-    transform: translate(50%, 50%);
+    transform: translate(25%, 0);
   }
 }

@@ -45,40 +45,41 @@
 }
 
 body {
-    background: linear-gradient(to bottom, white, #f0fdf4);
-    min-height: 100vh;
-    overflow-x: hidden;
-    position: relative;
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  background: linear-gradient(to bottom, white, #f0fdf4);
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-body::before, body::after {
-    content: '';
-    position: absolute;
-    border-radius: 50%;
-    filter: blur(3xl);
-    opacity: 0.2;
-    pointer-events: none;
+body::before,
+body::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(3xl);
+  opacity: 0.2;
+  pointer-events: none;
 }
 
 body::before {
-    top: 0;
-    left: 0;
-    width: 18rem;
-    height: 18rem;
-    background: #86efac;
-    transform: translate(-50%, -50%);
+  top: 0;
+  left: 0;
+  width: 18rem;
+  height: 18rem;
+  background: #86efac;
+  transform: translate(-50%, -50%);
 }
 
 body::after {
-    bottom: 0;
-    right: 0;
-    width: 24rem;
-    height: 24rem;
-    background: #fde68a;
-    transform: translate(50%, 50%);
+  bottom: 0;
+  right: 0;
+  width: 24rem;
+  height: 24rem;
+  background: #fde68a;
+  transform: translate(50%, 50%);
 }
 
 .custom-dots li {
@@ -97,7 +98,4 @@ body::after {
 .custom-dots li div {
   @apply bg-white/50 w-full h-[3px] rounded-full;
   /* Normal dot style */
-}
-.carousel .slide {
-  transition: opacity 0.5s ease-in-out !important;
 }

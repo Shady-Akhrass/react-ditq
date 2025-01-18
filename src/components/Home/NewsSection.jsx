@@ -33,7 +33,7 @@ const NewsSection = () => {
         return (
             <section className="py-8 ">
                 <Helmet>
-                    <title>News - Your Website</title>
+                    {/* <title>News - Your Website</title> */}
                     <meta name="description" content="Description of your website's news section." />
                     <meta property="og:title" content="News - Your Website" />
                     <meta property="og:description" content="Description of your website's news section." />
@@ -64,7 +64,7 @@ const NewsSection = () => {
     return (
         <section className="py-8">
             <Helmet>
-                <title>News - Your Website</title>
+                {/* <title>News - Your Website</title> */}
                 <meta name="description" content="Description of your website's news section." />
                 <meta property="og:title" content="News - Your Website" />
                 <meta property="og:description" content="Description of your website's news section." />
