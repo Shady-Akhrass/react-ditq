@@ -1,30 +1,78 @@
-# React + Vite
+# DITQ React Website
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern React website built with Vite, TailwindCSS, and other cutting-edge technologies.
 
-Currently, two official plugins are available:
+## Tech Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- React + Vite
+- TailwindCSS
+- React Slick
+- Axios
+
+## Prerequisites
+
+- Node.js 16.x or later
+- npm or yarn
 
 ## Installation
 
-To get started, clone the repository and install the dependencies:
-
+1. Clone the repository:
 ```bash
 git clone https://github.com/Shady-Akhrass/react-ditq.git
 cd react-ditq
+```
+
+2. Install dependencies:
+```bash
 npm install
 ```
 
-Then, start the development server:
+3. Install and configure TailwindCSS:
+```bash
+npm install -D tailwindcss postcss autoprefixer
+npx tailwindcss init -p
+```
 
+## Development
+
+Start the development server:
 ```bash
 npm run dev
 ```
 
-For a production build, run:
+## Building for Production
 
+Create a production build:
 ```bash
 npm run build
 ```
+
+## Project Structure
+
+```
+src/
+├── components/
+│   ├── Home/
+│   │   └── SliderSection.jsx
+│   └── ...
+├── App.jsx
+└── main.jsx
+```
+
+## Available Scripts
+
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run preview` - Preview production build
+
+## Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
