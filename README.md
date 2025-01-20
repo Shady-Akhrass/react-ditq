@@ -47,17 +47,7 @@ Create a production build:
 npm run build
 ```
 
-## Project Structure
 
-```
-src/
-├── components/
-│   ├── Home/
-│   │   └── SliderSection.jsx
-│   └── ...
-├── App.jsx
-└── main.jsx
-```
 
 ## Available Scripts
 

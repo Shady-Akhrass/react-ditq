@@ -23,7 +23,7 @@ const SoundSection = () => {
 
     if (isLoading) {
         return (
-            <section className="relative py-16 min-h-screen overflow-hidden">
+            <section className="relative py-16 min-h-screen overflow-hidden ">
                 <div className="container mx-auto text-center relative px-4">
                     <Skeleton height={40} width={300} className="mb-16" />
                     <div className="flex items-center justify-between w-full">

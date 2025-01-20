@@ -114,7 +114,7 @@ const GeniusesSection = () => {
 
                             <div className={`
                                 flex flex-col items-center justify-center p-10 transition-all duration-500
-                                ${isExpanded ? 'w-full mt-24' : 'flex-grow'}
+                                ${isExpanded ? 'w-full mt-20' : 'flex-grow'}
                             `}>
                                 <div className="text-center w-full max-w-3xl mx-auto">
                                     <h3 className="font-semibold text-3xl mb-4">
@@ -134,7 +134,7 @@ const GeniusesSection = () => {
                             <div className={`
                                 transition-all duration-500 ease-out overflow-hidden
                                 ${isExpanded
-                                    ? 'absolute top-8 left-1/2 transform -translate-x-1/2 w-40 h-40 rounded-full shadow-xl z-10'
+                                    ? 'absolute top-8 left-1/2 transform -translate-x-1/2 w-40 h-40 rounded-full shadow-xl z-8'
                                     : 'w-2/5 flex-shrink-0'
                                 }
                             `}

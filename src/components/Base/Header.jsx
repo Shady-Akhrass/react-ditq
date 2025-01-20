@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { FaBars, FaTimes, FaChevronDown, FaHome, FaInfoCircle, FaBookOpen, FaNewspaper, FaBook, FaPhoneAlt } from 'react-icons/fa';
 import { FiSearch } from 'react-icons/fi';
 import { Helmet } from 'react-helmet';
 import Logo from '../../../public/logo.png';
+import toast from 'react-hot-toast';
 
 const Navbar = () => {
     const [navOpen, setNavOpen] = useState(false);
@@ -11,7 +12,10 @@ const Navbar = () => {
     const [isScrolled, setIsScrolled] = useState(false);
     const [selectedItem, setSelectedItem] = useState(null);
     const [pageTitle, setPageTitle] = useState('دار الإتقان - الصفحة الرئيسية');
+    const [searchQuery, setSearchQuery] = useState('');
+    const [isSearching, setIsSearching] = useState(false);
     const location = useLocation();
+    const navigate = useNavigate();
 
     const menuItems = [
         {
@@ -72,15 +76,10 @@ const Navbar = () => {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
-    // Function to find menu item or submenu item by path
     const findMenuItemByPath = (path) => {
-        // Remove leading slash for comparison
         const normalizedPath = path.replace(/^\//, '');
-
-        // Check main menu items
         let menuItem = menuItems.find(item => item.link?.replace(/^\//, '') === normalizedPath);
 
-        // If not found in main menu, check submenus
         if (!menuItem) {
             for (const item of menuItems) {
                 if (item.submenu) {
@@ -97,19 +96,16 @@ const Navbar = () => {
         return { mainItem: menuItem };
     };
 
-    // Update selected item and page title based on current route
     useEffect(() => {
         const currentPath = location.pathname;
         const { mainItem, subItem } = findMenuItemByPath(currentPath);
 
-        // Set selected item based on current path
         if (subItem) {
             setSelectedItem(subItem.id);
             setOpenDropdown(mainItem.id);
             setPageTitle(`${subItem.label} | ${mainItem.label} | دار إتقان القرآن الكريم`);
         } else if (mainItem) {
             setSelectedItem(mainItem.id);
-            // Special case for home route
             if (mainItem.id === 'home') {
                 setPageTitle('دار الإتقان - الصفحة الرئيسية');
             } else {
@@ -117,7 +113,6 @@ const Navbar = () => {
             }
         }
 
-        // Save to localStorage for persistence
         if (subItem) {
             localStorage.setItem('selectedItem', subItem.id);
             localStorage.setItem('openDropdown', mainItem.id);
@@ -127,7 +122,6 @@ const Navbar = () => {
         }
     }, [location.pathname]);
 
-    // Restore selected state on component mount
     useEffect(() => {
         const savedSelectedItem = localStorage.getItem('selectedItem');
         const savedOpenDropdown = localStorage.getItem('openDropdown');
@@ -148,13 +142,44 @@ const Navbar = () => {
     const handleItemClick = (item, parentItem) => {
         setSelectedItem(item);
         setNavOpen(false);
-
-        // Save state to localStorage
         localStorage.setItem('selectedItem', item);
         if (parentItem) {
             localStorage.setItem('openDropdown', parentItem);
         } else {
             localStorage.setItem('openDropdown', '');
+        }
+    };
+
+    const handleSearch = async (e) => {
+        e.preventDefault();
+        if (!searchQuery.trim()) return;
+
+        setIsSearching(true);
+        try {
+            const response = await fetch(`https://ditq.org/api/search?query=${encodeURIComponent(searchQuery.trim())}`, {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json'
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('لم يتم العثور على نتائج');
+            }
+
+            const data = await response.json();
+            navigate('/search-results', {
+                state: {
+                    results: data,
+                    query: searchQuery.trim()
+                }
+            });
+
+            setSearchQuery('');
+        } catch (error) {
+            toast.error(error.message || 'حدث خطأ في البحث');
+        } finally {
+            setIsSearching(false);
         }
     };
 
@@ -172,6 +197,7 @@ const Navbar = () => {
                 <meta name="twitter:description" content={pageTitle} />
                 <meta name="twitter:image" content="URL_to_image" />
             </Helmet>
+
             <header className={`fixed top-0 w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-white shadow-md' : 'bg-transparent'}`}>
                 <nav className="container mx-auto flex items-center justify-between px-6 py-2" dir="rtl">
                     <div className="flex items-center justify-between w-screen" dir='rtl'>
@@ -229,6 +255,15 @@ const Navbar = () => {
                                     )}
                                 </div>
                             ))}
+                            {/* Desktop Donate Button */}
+                            <a
+                                href="https://wa.me/+972592889891"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="bg-green-400 text-white px-4 py-2 rounded-full text-lg hover:bg-green-600 transition-colors duration-300"
+                            >
+                                تبرع لنا
+                            </a>
                         </div>
                     </div>
 
@@ -285,34 +320,44 @@ const Navbar = () => {
                                     )}
                                 </div>
                             ))}
-                            <div className="mt-6">
-                                <a
-                                    href="https://wa.me/+972592889891"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="block w-full bg-green-400 text-white text-center px-4 py-2 rounded-full text-lg hover:bg-green-600"
-                                >
-                                    تبرع لنا
-                                </a>
-                            </div>
+                            {/* Mobile Donate Button */}
+                            <a
+                                href="https://wa.me/+972592889891"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="block w-full bg-green-400 text-white text-center px-4 py-2 rounded-full text-lg hover:bg-green-600 transition-colors duration-300 mt-4"
+                            >
+                                تبرع لنا
+                            </a>
                         </div>
                     </div>
 
                     {/* Search Box */}
+
                     <form
+                        onSubmit={handleSearch}
                         className={`search-box hidden lg:flex items-center transition-all duration-300 rounded-full ${isScrolled ? 'bg-white shadow-md' : 'bg-transparent'}`}
-                        role="search"
-                        method="GET"
-                        action="/itqan/search"
                     >
                         <div className="relative">
                             <input
                                 type="search"
-                                name="search"
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
                                 placeholder="بحث..."
                                 className="border border-gray-300 rounded-full px-4 py-2 pr-10 w-64 focus:outline-none focus:ring-2 focus:ring-green-500"
+                                disabled={isSearching}
                             />
-                            <FiSearch className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500" />
+                            <button
+                                type="submit"
+                                disabled={isSearching}
+                                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-green-600"
+                            >
+                                {isSearching ? (
+                                    <div className="w-5 h-5 border-t-2 border-green-500 border-solid rounded-full animate-spin" />
+                                ) : (
+                                    <FiSearch className="w-5 h-5" />
+                                )}
+                            </button>
                         </div>
                     </form>
                 </nav>

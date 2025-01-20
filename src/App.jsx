@@ -13,6 +13,8 @@ import Footer from './components/Base/Footer';
 import Home from './components/Home/Home';
 import FloatingButtons from './components/Home/FloatingButtons';
 import Clues from './components/Clues/Clues';
+import ContactSection from './components/Contact/ContactSection';
+import Speech from './components/about/Speech';
 
 function App() {
   return (
@@ -38,6 +40,9 @@ function App() {
               <Route path="/memorization-section" element={<MemorizationSection />} />
               <Route path="/creatives-section" element={<CreativeSection />} />
               <Route path="/clues" element={<Clues />} />
+              <Route path="/contact-us" element={<ContactSection />} />
+              <Route path="/speech" element={<Speech />} />
+
 
             </Routes>
           </main>
