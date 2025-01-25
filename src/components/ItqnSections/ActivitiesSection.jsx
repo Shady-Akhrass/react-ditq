@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { Carousel } from 'react-responsive-carousel';
 import { Facebook, Home, ChevronLeft } from 'lucide-react';
+import { Helmet } from 'react-helmet';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 
 const carouselStyles = `
@@ -61,12 +62,32 @@ const ActivitiesSection = () => {
             });
     }, []);
 
+    const getMetaDescription = () => {
+        if (activities && activities.length > 0 && activities[0].activities[0]) {
+            return activities[0].activities[0].about.substring(0, 160) + '...';
+        }
+        return "استكشف أنشطة ومسابقات دار الإتقان المتنوعة. برامج تعليمية وترفيهية متميزة للطلاب والمجتمع.";
+    };
+
     if (loading) return <div>Loading...</div>;
     if (error) return <div>{error}</div>;
     if (!activities?.length) return <div>No activities found</div>;
 
+    const metaDescription = getMetaDescription();
+
     return (
         <div className="min-h-screen py-24 px-4 sm:px-6 lg:px-8">
+            <Helmet>
+                <title>الأنشطة والمسابقات - دار الإتقان</title>
+                <meta name="description" content={metaDescription} />
+                <meta name="keywords" content={`دار الإتقان, أنشطة, مسابقات, برامج تعليمية, غزة${activities.length > 0 ? `, ${activities[0].activities[0]?.title || ''}` : ''}`} />
+                <meta property="og:title" content="الأنشطة والمسابقات - دار الإتقان" />
+                <meta property="og:description" content={metaDescription} />
+                <meta property="og:type" content="website" />
+                {activities.length > 0 && activities[0].activities_images && activities[0].activities_images.length > 0 && (
+                    <meta property="og:image" content={`https://ditq.org/storage/${activities[0].activities_images[0].image}`} />
+                )}
+            </Helmet>
             <style>{carouselStyles}</style>
 
             {/* Navigation Path */}

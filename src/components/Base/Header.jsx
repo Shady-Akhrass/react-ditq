@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { FaBars, FaTimes, FaChevronDown, FaHome, FaInfoCircle, FaBookOpen, FaNewspaper, FaBook, FaPhoneAlt } from 'react-icons/fa';
+import { FaBars, FaTimes, FaChevronDown, FaHome, FaInfoCircle, FaBookOpen, FaNewspaper, FaBook, FaPhoneAlt, FaMoon, FaSun } from 'react-icons/fa';
 import { FiSearch } from 'react-icons/fi';
 import { Helmet } from 'react-helmet';
 import Logo from '../../../public/logo.png';
@@ -14,6 +14,7 @@ const Navbar = () => {
     const [pageTitle, setPageTitle] = useState('دار الإتقان - الصفحة الرئيسية');
     const [searchQuery, setSearchQuery] = useState('');
     const [isSearching, setIsSearching] = useState(false);
+    const [isDarkMode, setIsDarkMode] = useState(localStorage.getItem('darkMode') === 'true');
     const location = useLocation();
     const navigate = useNavigate();
 
@@ -30,7 +31,7 @@ const Navbar = () => {
             id: 'about',
             submenu: [
                 { label: 'مجلس الإدارة', link: '/director', id: 'director' },
-                { label: 'الرؤية والرسالة', link: '/vision', id: 'vision' },
+                { label: 'الرؤية والرسالة', link: '/mission', id: 'mission' },
                 { label: 'كلمة رئيس الدار', link: '/speech', id: 'speech' },
                 { label: 'الفروع', link: '/branches', id: 'branches' }
             ]
@@ -134,6 +135,15 @@ const Navbar = () => {
         }
     }, []);
 
+    useEffect(() => {
+        if (isDarkMode) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+        localStorage.setItem('darkMode', isDarkMode);
+    }, [isDarkMode]);
+
     const toggleDropdown = (dropdownName) => {
         setOpenDropdown(openDropdown === dropdownName ? null : dropdownName);
         localStorage.setItem('openDropdown', openDropdown === dropdownName ? '' : dropdownName);
@@ -183,6 +193,10 @@ const Navbar = () => {
         }
     };
 
+    const toggleDarkMode = () => {
+        setIsDarkMode(!isDarkMode);
+    };
+
     return (
         <>
             <Helmet>
@@ -198,9 +212,11 @@ const Navbar = () => {
                 <meta name="twitter:image" content="URL_to_image" />
             </Helmet>
 
-            <header className={`fixed top-0 w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-white shadow-md' : 'bg-transparent'}`}>
+            <header className={`fixed top-0 w-full z-50 transition-all duration-300 ${isScrolled ? 'dark:bg-gray-800 bg-white shadow-md' : 'bg-transparent'}`}>
                 <nav className="container mx-auto flex items-center justify-between px-6 py-2" dir="rtl">
                     <div className="flex items-center justify-between w-screen" dir='rtl'>
+
+
                         {/* Mobile Menu Button */}
                         <button
                             className="lg:hidden text-2xl bg-white px-2 py-2 rounded left-0"
@@ -216,25 +232,26 @@ const Navbar = () => {
                             </Link>
                         </div>
 
+
                         {/* Desktop Menu */}
-                        <div className="hidden lg:flex items-center justify-left space-x-8 space-x-reverse bg-white rounded-full p-2 px-8 w-max mx-auto my-auto">
+                        <div className="hidden lg:flex items-center justify-left space-x-8 space-x-reverse bg-white dark:bg-gray-800 rounded-full p-2 px-8 w-max mx-auto my-auto">
                             {menuItems.map((item) => (
                                 <div key={item.id} className="relative">
                                     {item.submenu ? (
                                         <div>
                                             <button
                                                 onClick={() => toggleDropdown(item.id)}
-                                                className={`flex items-center text-lg font-medium hover:text-green-600 ${openDropdown === item.id ? 'text-green-600' : ''}`}
+                                                className={`flex items-center text-lg font-medium hover:text-green-600 dark:hover:text-yellow-400 ${openDropdown === item.id ? 'text-green-600 dark:text-yellow-400' : 'dark:text-white'}`}
                                             >
                                                 {item.label} <FaChevronDown className="mr-2" />
                                             </button>
                                             {openDropdown === item.id && (
-                                                <ul className="absolute right-0 mt-2 w-56 bg-white shadow-lg rounded-lg py-2 z-10">
+                                                <ul className="absolute right-0 mt-2 w-56 bg-white dark:bg-gray-800 shadow-lg rounded-lg py-2 z-10">
                                                     {item.submenu.map((subItem) => (
                                                         <li key={subItem.id}>
                                                             <Link
                                                                 to={subItem.link}
-                                                                className={`block px-4 py-2 text-sm hover:bg-gray-100 ${selectedItem === subItem.id ? 'bg-green-100 text-green-600' : ''}`}
+                                                                className={`block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 ${selectedItem === subItem.id ? 'bg-green-100 dark:bg-gray-700 text-green-600 dark:text-yellow-400' : 'dark:text-white'}`}
                                                                 onClick={() => handleItemClick(subItem.id, item.id)}
                                                             >
                                                                 {subItem.label}
@@ -247,7 +264,7 @@ const Navbar = () => {
                                     ) : (
                                         <Link
                                             to={item.link}
-                                            className={`text-lg font-medium hover:text-green-600 ${selectedItem === item.id ? 'text-green-600' : ''}`}
+                                            className={`text-lg font-medium hover:text-green-600 dark:hover:text-yellow-400 ${selectedItem === item.id ? 'text-green-600 dark:text-yellow-400' : 'dark:text-white'}`}
                                             onClick={() => handleItemClick(item.id)}
                                         >
                                             {item.label}
@@ -260,7 +277,7 @@ const Navbar = () => {
                                 href="https://wa.me/+972592889891"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="bg-green-400 text-white px-4 py-2 rounded-full text-lg hover:bg-green-600 transition-colors duration-300"
+                                className="bg-green-400 dark:bg-yellow-400 text-white dark:text-gray-900 px-4 py-2 rounded-full text-lg hover:bg-green-600 dark:hover:bg-yellow-500 transition-colors duration-300"
                             >
                                 تبرع لنا
                             </a>
@@ -331,12 +348,18 @@ const Navbar = () => {
                             </a>
                         </div>
                     </div>
-
+                    {/* Dark Mode Toggle */}
+                    <button
+                        onClick={toggleDarkMode}
+                        className="p-2 rounded-full bg-white dark:bg-gray-700 text-gray-800 dark:text-yellow-300 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors duration-200 ml-16"
+                    >
+                        {isDarkMode ? <FaSun /> : <FaMoon />}
+                    </button>
                     {/* Search Box */}
 
                     <form
                         onSubmit={handleSearch}
-                        className={`search-box hidden lg:flex items-center transition-all duration-300 rounded-full ${isScrolled ? 'bg-white shadow-md' : 'bg-transparent'}`}
+                        className={`search-box hidden lg:flex items-center transition-all duration-300 rounded-full ${isScrolled ? 'bg-white dark:bg-gray-800 shadow-md' : 'bg-transparent'}`}
                     >
                         <div className="relative">
                             <input
@@ -344,7 +367,7 @@ const Navbar = () => {
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
                                 placeholder="بحث..."
-                                className="border border-gray-300 rounded-full px-4 py-2 pr-10 w-64 focus:outline-none focus:ring-2 focus:ring-green-500"
+                                className="border border-gray-300 dark:border-gray-600 rounded-full px-4 py-2 pr-10 w-64 focus:outline-none focus:ring-2 focus:ring-green-500 dark:focus:ring-yellow-400 dark:bg-gray-700 dark:text-white"
                                 disabled={isSearching}
                             />
                             <button

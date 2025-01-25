@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { Carousel } from 'react-responsive-carousel';
 import { Facebook, Home, ChevronLeft } from 'lucide-react';
+import { Helmet } from 'react-helmet';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 
 const carouselStyles = `
@@ -39,12 +40,32 @@ const MemorizationSection = () => {
             });
     }, []);
 
+    const getMetaDescription = () => {
+        if (memorization?.length > 0 && memorization[0].memorizations[0]) {
+            return memorization[0].memorizations[0].about.substring(0, 160) + '...';
+        }
+        return "قسم تحفيظ القرآن الكريم في دار الإتقان - برنامج متكامل لتحفيظ القرآن الكريم وتعليم أحكام التجويد";
+    };
+
     if (loading) return <div>Loading...</div>;
     if (error) return <div>{error}</div>;
     if (!memorization?.length) return <div>No memorization found</div>;
 
+    const metaDescription = getMetaDescription();
+
     return (
         <div className="min-h-screen py-24 px-4 sm:px-6 lg:px-8">
+            <Helmet>
+                <title>قسم تحفيظ القرآن الكريم - دار الإتقان</title>
+                <meta name="description" content={metaDescription} />
+                <meta name="keywords" content={`دار الإتقان, تحفيظ القرآن, تجويد, حلقات تحفيظ${memorization.length > 0 ? `, ${memorization[0].memorizations[0]?.title || ''}` : ''}`} />
+                <meta property="og:title" content="قسم تحفيظ القرآن الكريم - دار الإتقان" />
+                <meta property="og:description" content={metaDescription} />
+                <meta property="og:type" content="website" />
+                {memorization.length > 0 && memorization[0].memorization_images && memorization[0].memorization_images.length > 0 && (
+                    <meta property="og:image" content={`https://ditq.org/storage/${memorization[0].memorization_images[0].image}`} />
+                )}
+            </Helmet>
             <style>{carouselStyles}</style>
 
             {/* Navigation Path */}

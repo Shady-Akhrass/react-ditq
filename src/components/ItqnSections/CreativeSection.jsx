@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { Carousel } from 'react-responsive-carousel';
 import { Facebook, Home, ChevronLeft } from 'lucide-react';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
+import { Helmet } from 'react-helmet';
 
 const carouselStyles = `
   .carousel .control-dots .dot {
@@ -39,12 +40,32 @@ const CreativeSection = () => {
             });
     }, []);
 
+    const getMetaDescription = () => {
+        if (creatives?.length > 0 && creatives[0].creatives[0]) {
+            return creatives[0].creatives[0].about.substring(0, 160) + '...';
+        }
+        return "قسم التربية والمواهب الإبداعية في دار الإتقان - تنمية المواهب وصقل الشخصية";
+    };
+
     if (loading) return <div>Loading...</div>;
     if (error) return <div>{error}</div>;
     if (!creatives?.length) return <div>No creative content found</div>;
 
+    const metaDescription = getMetaDescription();
+
     return (
         <div className="min-h-screen py-24 px-4 sm:px-6 lg:px-8">
+            <Helmet>
+                <title>قسم التربية والمواهب الإبداعية - دار الإتقان</title>
+                <meta name="description" content={metaDescription} />
+                <meta name="keywords" content={`دار الإتقان, تربية, مواهب إبداعية, تنمية المواهب${creatives.length > 0 ? `, ${creatives[0].creatives[0]?.title || ''}` : ''}`} />
+                <meta property="og:title" content="قسم التربية والمواهب الإبداعية - دار الإتقان" />
+                <meta property="og:description" content={metaDescription} />
+                <meta property="og:type" content="website" />
+                {creatives.length > 0 && creatives[0].creative_images && creatives[0].creative_images.length > 0 && (
+                    <meta property="og:image" content={`https://ditq.org/storage/${creatives[0].creative_images[0].image}`} />
+                )}
+            </Helmet>
             <style>{carouselStyles}</style>
 
             {/* Navigation Path */}

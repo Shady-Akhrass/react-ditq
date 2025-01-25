@@ -122,6 +122,7 @@ const ContactSection = () => {
                                             name="phone"
                                             placeholder="رقم الجوال"
                                             required
+                                            dir='rtl'
                                             className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-green-500 focus:ring-2 focus:ring-green-200 transition-all outline-none"
                                             onChange={handleChange}
                                         />

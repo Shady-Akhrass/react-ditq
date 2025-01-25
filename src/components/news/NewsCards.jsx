@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
+import { Helmet } from 'react-helmet';
 import axios from 'axios';
 import { IoChevronBackOutline, IoChevronForwardOutline } from 'react-icons/io5';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
-import { useNavigate, Link  } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { ChevronLeft, Home } from 'lucide-react';
 
 const AllNewsPage = () => {
@@ -32,7 +33,14 @@ const AllNewsPage = () => {
     }, []);
 
     const generateDetailsUrl = (newsItem) => {
-        return `/news/${newsItem.id}/${encodeURIComponent(newsItem.title.replace(/\s+/g, '-'))}`;
+        // Use a URL-friendly slug based on the title
+        const slug = newsItem.title
+            .toLowerCase()
+            .replace(/[^\w\s-]/g, '')  // Remove non-word chars
+            .replace(/\s+/g, '-')      // Replace spaces with hyphens
+            .replace(/-+/g, '-');      // Replace multiple hyphens with single
+
+        return `/news/${newsItem.id}/${slug}`;
     };
 
     const handlePageChange = (pageNumber) => {

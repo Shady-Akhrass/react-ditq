@@ -12,8 +12,12 @@
 
 @layer base {
   body {
-    @apply bg-gradient-to-b from-white to-green-50 min-h-screen overflow-x-hidden relative flex flex-col;
+    @apply bg-gradient-to-b from-white to-green-50 min-h-screen overflow-x-hidden relative flex flex-col text-gray-800;
     font-family: 'Tajawal', sans-serif;
+  }
+
+  .dark body {
+    @apply bg-gradient-to-b from-gray-900 to-gray-800 text-gray-100;
   }
 
   body::before, body::after {
@@ -30,5 +34,100 @@
   body::after {
     @apply bottom-0 right-0 w-96 h-96 bg-yellow-200;
     transform: translate(25%, 0);
+  }
+
+  .dark body::before {
+    @apply bg-emerald-600/30;  /* Changed from bg-green-700 for better visibility */
+  }
+
+  .dark body::after {
+    @apply bg-yellow-600/30;  /* Changed from bg-yellow-700 for better visibility */
+  }
+
+  /* Add card styles */
+  .card {
+    @apply bg-white rounded-lg shadow-md transition-all duration-300;
+  }
+
+  .dark .card {
+    @apply bg-gray-800 border border-emerald-500/20 text-gray-100;  /* Updated border color */
+  }
+
+  /* Add dark mode styles for white background elements */
+  .dark .bg-white {
+    @apply bg-gray-800;
+  }
+
+  /* Update dark mode text colors for better contrast */
+  .dark .text-gray-800 {
+    @apply text-gray-50;
+  }
+
+  .dark .text-gray-600 {
+    @apply text-gray-200;  /* Lighter gray for better readability */
+  }
+
+  .dark .text-gray-900 {
+    @apply text-white;  /* Pure white for maximum contrast */
+  }
+
+  /* Add heading styles */
+  h1, h2, h3, h4, h5, h6 {
+    @apply text-gray-900;
+  }
+
+  .dark h1, .dark h2, .dark h3, .dark h4, .dark h5, .dark h6 {
+    @apply text-white;  /* Changed from text-gray-100 for better visibility */
+  }
+
+  /* Add Footer dark mode styles */
+  .dark .bg-emerald-900 {
+    @apply bg-gray-900 border-t border-emerald-500/30;  /* Updated border color */
+  }
+
+  .dark .text-emerald-100 {
+    @apply text-gray-50;
+  }
+
+  .dark .text-emerald-200 {
+    @apply text-gray-200;
+  }
+
+  .dark .border-emerald-800 {
+    @apply border-emerald-500/40;  /* Updated for better visibility */
+  }
+
+  /* Add shine effect for dark mode footer */
+  .dark footer {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .dark footer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(
+      120deg,
+      transparent,
+      rgba(16, 185, 129, 0.15),  /* Changed to emerald color with higher opacity */
+      transparent
+    );
+    animation: shine 3s infinite;
+  }
+
+  @keyframes shine {
+    0% {
+      left: -100%;
+    }
+    50% {
+      left: 100%;
+    }
+    100% {
+      left: 100%;
+    }
   }
 }

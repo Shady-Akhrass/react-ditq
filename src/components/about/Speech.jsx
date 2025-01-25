@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { Link } from 'react-router-dom';
 import { Home, ChevronLeft } from 'lucide-react';
+// Add this import at the top
+import backgroundPattern from '../../assets/images/islamic-pattern.jpg';
 
 const Speech = () => {
     const [speechData, setSpeechData] = useState(null);
@@ -93,7 +95,10 @@ const Speech = () => {
             </Helmet>
 
             <div className="relative min-h-screen bg-warm-gray-50 py-24 px-4 sm:px-6 lg:px-8">
-                <div className="absolute inset-0 opacity-5 bg-[url('/path/to/islamic-pattern.svg')] pointer-events-none"></div>
+                <div 
+                    className="absolute inset-0 opacity-5 pointer-events-none"
+                    style={{ backgroundImage: `url(${backgroundPattern})` }}
+                ></div>
 
                 <div className="max-w-7xl mx-auto">
                     <div className="mb-6" dir="rtl">
@@ -122,7 +127,7 @@ const Speech = () => {
                                 <div className="md:w-2/5">
                                     <div className="sticky top-8">
                                         <div className="relative">
-                                            <div className="absolute inset-0 bg-gradient-to-tr from-emerald-100 to-teal-50 transform rotate-3 rounded-3xl"></div>
+                                            <div className="absolute inset-0 transform rotate-3 rounded-3xl"></div>
 
                                             <div className="relative p-6">
                                                 <img

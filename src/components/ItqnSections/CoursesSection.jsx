@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { Carousel } from 'react-responsive-carousel';
 import { Facebook, Home, ChevronLeft } from 'lucide-react';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
+import { Helmet } from 'react-helmet';
 
 const carouselStyles = `
   .carousel .control-dots .dot {
@@ -39,12 +40,32 @@ const CoursesSection = () => {
             });
     }, []);
 
+    const getMetaDescription = () => {
+        if (courses?.length > 0 && courses[0].courses[0]) {
+            return courses[0].courses[0].about.substring(0, 160) + '...';
+        }
+        return "قسم الدورات والتجويد والأسانيد في دار الإتقان - دورات متخصصة في علوم القرآن والتجويد";
+    };
+
     if (loading) return <div>Loading...</div>;
     if (error) return <div>{error}</div>;
     if (!courses?.length) return <div>No courses found</div>;
 
+    const metaDescription = getMetaDescription();
+
     return (
         <div className="min-h-screen py-24 px-4 sm:px-6 lg:px-8">
+            <Helmet>
+                <title>قسم الدورات والتجويد والأسانيد - دار الإتقان</title>
+                <meta name="description" content={metaDescription} />
+                <meta name="keywords" content={`دار الإتقان, دورات, تجويد, أسانيد, علوم القرآن${courses.length > 0 ? `, ${courses[0].courses[0]?.title || ''}` : ''}`} />
+                <meta property="og:title" content="قسم الدورات والتجويد والأسانيد - دار الإتقان" />
+                <meta property="og:description" content={metaDescription} />
+                <meta property="og:type" content="website" />
+                {courses.length > 0 && courses[0].course_images && courses[0].course_images.length > 0 && (
+                    <meta property="og:image" content={`https://ditq.org/storage/${courses[0].course_images[0].image}`} />
+                )}
+            </Helmet>
             <style>{carouselStyles}</style>
 
             {/* Navigation Path */}

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Helmet } from 'react-helmet';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { Copy, Facebook, Share2, Calendar, ChevronRight, ChevronLeft, Home } from 'lucide-react';
 import { Carousel } from 'react-responsive-carousel';
@@ -18,15 +19,15 @@ const carouselStyles = `
 `;
 
 const NewsDetails = () => {
-    const { id } = useParams();
+    const { id, slug } = useParams();
     const navigate = useNavigate();
     const [newsItem, setNewsItem] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [nextNews, setNextNews] = useState(null);
     const [prevNews, setPrevNews] = useState(null);
-    const [isVisible, setIsVisible] = useState(false);
     const [copySuccess, setCopySuccess] = useState(false);
+    const [isVisible, setIsVisible] = useState(false);
 
     useEffect(() => {
         const loadFacebookSDK = () => {
@@ -53,23 +54,35 @@ const NewsDetails = () => {
     useEffect(() => {
         const fetchNewsDetails = async () => {
             try {
-                // First try to get from localStorage
                 const cachedNews = JSON.parse(localStorage.getItem('allNews') || '[]');
 
-                if (cachedNews.length > 0) {
-                    const currentNews = cachedNews.find(news => news.id.toString() === id.toString());
-                    if (currentNews) {
-                        setNewsItem(currentNews);
-                        const currentIndex = cachedNews.findIndex(news => news.id.toString() === id.toString());
-                        if (currentIndex > 0) {
-                            setPrevNews(cachedNews[currentIndex - 1]);
-                        }
-                        if (currentIndex < cachedNews.length - 1) {
-                            setNextNews(cachedNews[currentIndex + 1]);
-                        }
+                // Find news by ID, regardless of the current slug
+                const currentNews = cachedNews.find(news => news.id.toString() === id.toString());
+
+                if (currentNews) {
+                    // Redirect if current URL slug doesn't match the generated slug
+                    const correctSlug = currentNews.title
+                        .toLowerCase()
+                        .replace(/[^\w\s-]/g, '')
+                        .replace(/\s+/g, '-')
+                        .replace(/-+/g, '-');
+
+                    if (slug !== correctSlug) {
+                        navigate(`/news/${currentNews.id}/${correctSlug}`, { replace: true });
+                        return;
+                    }
+
+                    setNewsItem(currentNews);
+                    const currentIndex = cachedNews.findIndex(news => news.id.toString() === id.toString());
+
+                    if (currentIndex > 0) {
+                        setPrevNews(cachedNews[currentIndex - 1]);
+                    }
+                    if (currentIndex < cachedNews.length - 1) {
+                        setNextNews(cachedNews[currentIndex + 1]);
                     }
                 } else {
-                    // Fallback to API
+                    // Fallback to API if not in cache
                     const response = await axios.get('https://ditq.org/api/indexAPI');
                     const allNews = response?.data?.newss || [];
                     const currentNews = allNews.find(news => news.id.toString() === id.toString());
@@ -77,14 +90,6 @@ const NewsDetails = () => {
                     if (currentNews) {
                         setNewsItem(currentNews);
                         localStorage.setItem('allNews', JSON.stringify(allNews));
-
-                        const currentIndex = allNews.findIndex(news => news.id.toString() === id.toString());
-                        if (currentIndex > 0) {
-                            setPrevNews(allNews[currentIndex - 1]);
-                        }
-                        if (currentIndex < allNews.length - 1) {
-                            setNextNews(allNews[currentIndex + 1]);
-                        }
                     }
                 }
             } catch (error) {
@@ -96,15 +101,23 @@ const NewsDetails = () => {
         };
 
         fetchNewsDetails();
-    }, [id]);
+    }, [id, slug, navigate]);
 
     const generateNewsUrl = (newsItem) => {
-        return `/news/${newsItem.id}/${encodeURIComponent(newsItem.title.replace(/\s+/g, '-'))}`;
+        // Create URL-friendly slug
+        const friendlySlug = newsItem.title
+            .toLowerCase()
+            .replace(/[^\w\s-]/g, '')  // Remove non-word chars
+            .replace(/\s+/g, '-')      // Replace spaces with hyphens
+            .replace(/-+/g, '-');      // Replace multiple hyphens with single
+
+        return `/news/${newsItem.id}/${friendlySlug}`;
     };
 
     const copyShortLink = () => {
-        const shortUrl = window.location.href;
-        navigator.clipboard.writeText(shortUrl);
+        // Copy the full URL, including the current domain
+        const fullUrl = `${window.location.origin}/news/${newsItem.id}/${slug || generateNewsUrl(newsItem).split('/').pop()}`;
+        navigator.clipboard.writeText(fullUrl);
         setCopySuccess(true);
         setTimeout(() => setCopySuccess(false), 3000);
     };
@@ -145,6 +158,13 @@ const NewsDetails = () => {
 
     return (
         <>
+            <Helmet>
+                <title>{newsItem.title}</title>
+                <meta name="description" content={newsItem.object.substring(0, 160)} />
+                <meta property="og:title" content={newsItem.title} />
+                <meta property="og:description" content={newsItem.object.substring(0, 160)} />
+                <meta property="og:image" content={newsItem.image} />
+            </Helmet>
             <style>{carouselStyles}</style>
             <div className="min-h-screen py-24 px-4 sm:px-6 lg:px-8 ">
                 <div className="max-w-7xl mx-auto mb-6" dir='rtl'>

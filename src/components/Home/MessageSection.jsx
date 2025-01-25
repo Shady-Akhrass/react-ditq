@@ -32,17 +32,14 @@ const MessageSection = () => {
     return (
         <>
             <Helmet>
-                {/* <title>Message - Your Website</title> */}
-                <meta name="description" content="Description of your website's message section." />
-                <meta property="og:title" content="Message - Your Website" />
-                <meta property="og:description" content="Description of your website's message section." />
-                <meta property="og:image" content="URL_to_image" />
-                <meta property="og:url" content="URL_to_page" />
-                <meta name="twitter:card" content="summary_large_image" />
-                <meta name="twitter:title" content="Message - Your Website" />
-                <meta name="twitter:description" content="Description of your website's message section." />
-                <meta name="twitter:image" content="URL_to_image" />
+                <title>رؤيتنا ورسالتنا - دار الإتقان</title>
+                <meta name="description" content={`رؤيتنا: ${vision} - رسالتنا: ${mission}`} />
+                <meta property="og:title" content="رؤيتنا ورسالتنا - دار الإتقان" />
+                <meta property="og:description" content={`رؤيتنا: ${vision} - رسالتنا: ${mission}`} />
+                <meta name="twitter:title" content="رؤيتنا ورسالتنا - دار الإتقان" />
+                <meta name="twitter:description" content={`رؤيتنا: ${vision} - رسالتنا: ${mission}`} />
             </Helmet>
+
             <section className="relative py-16  overflow-hidden">
                 <div className="container mx-auto px-4 relative z-10">
                     <h1 className="text-4xl font-bold text-center mb-16 text-gray-800">

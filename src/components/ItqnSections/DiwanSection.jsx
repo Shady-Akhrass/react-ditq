@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { Carousel } from 'react-responsive-carousel';
 import { Facebook, Home, ChevronLeft } from 'lucide-react';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
+import { Helmet } from 'react-helmet';
 
 const carouselStyles = `
   .carousel .control-dots .dot {
@@ -39,12 +40,32 @@ const DiwanSection = () => {
             });
     }, []);
 
+    const getMetaDescription = () => {
+        if (diwans?.length > 0 && diwans[0].diwans[0]) {
+            return diwans[0].diwans[0].about.substring(0, 160) + '...';
+        }
+        return "قسم ديوان الحفاظ في دار الإتقان - برنامج متميز لتخريج حفظة القرآن الكريم";
+    };
+
     if (loading) return <div>Loading...</div>;
     if (error) return <div>{error}</div>;
     if (!diwans?.length) return <div>No diwan found</div>;
 
+    const metaDescription = getMetaDescription();
+
     return (
         <div className="min-h-screen py-24 px-4 sm:px-6 lg:px-8">
+            <Helmet>
+                <title>قسم ديوان الحفاظ - دار الإتقان</title>
+                <meta name="description" content={metaDescription} />
+                <meta name="keywords" content={`دار الإتقان, ديوان الحفاظ, حفظة القرآن, تخريج الحفاظ${diwans.length > 0 ? `, ${diwans[0].diwans[0]?.title || ''}` : ''}`} />
+                <meta property="og:title" content="قسم ديوان الحفاظ - دار الإتقان" />
+                <meta property="og:description" content={metaDescription} />
+                <meta property="og:type" content="website" />
+                {diwans.length > 0 && diwans[0].diwan_images && diwans[0].diwan_images.length > 0 && (
+                    <meta property="og:image" content={`https://ditq.org/storage/${diwans[0].diwan_images[0].image}`} />
+                )}
+            </Helmet>
             <style>{carouselStyles}</style>
 
             {/* Navigation Path */}
