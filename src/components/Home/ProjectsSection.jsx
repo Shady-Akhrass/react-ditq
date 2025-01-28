@@ -78,7 +78,7 @@ const ProjectsSection = () => {
             </Helmet>
 
 
-            <section className="relative py-24 min-h-screen overflow-hidden" dir="rtl">
+            <section className="relative py-24 min-h-screen overflow-hidden">
                 <div className="container mx-auto relative px-4">
                     <motion.h2
                         initial={{ opacity: 0, y: 20 }}
@@ -102,10 +102,10 @@ const ProjectsSection = () => {
                                 <motion.div
                                     whileHover={{
                                         scale: 1.02,
-                                        boxShadow: "0 25px 30px -5px rgba(0, 0, 0, 0.15), 0 10px 10px -5px rgba(0, 0, 0, 0.04)"
+                                        boxShadow: "0 25px 30px -5px rgba(0, 0, 0, 0.15)"
                                     }}
                                     transition={{ duration: 0.3 }}
-                                    className="bg-white rounded-2xl shadow-xl overflow-hidden flex flex-col-reverse md:flex-row"
+                                    className="bg-white rounded-2xl shadow-xl overflow-hidden flex flex-col-reverse md:flex-row-reverse"
                                 >
                                     <motion.div
                                         className="md:w-1/2 p-8 md:p-12 flex flex-col justify-center"
@@ -133,12 +133,10 @@ const ProjectsSection = () => {
                                         <div className="flex justify-center md:justify-start space-x-4">
                                             <motion.button
                                                 onClick={() => openModal(currentProject)}
-                                                whileHover={{
-                                                    scale: 1.05,
-                                                    boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1)"
-                                                }}
+                                                whileHover={{ scale: 1.05 }}
                                                 whileTap={{ scale: 0.95 }}
-                                                className="w-32 md:w-48 bg-green-600 text-white text-center py-3 md:py-4 rounded-lg hover:bg-green-700 transition-colors text-sm md:text-base"
+                                                className="w-32 md:w-48 bg-green-600 text-white text-center py-3 md:py-4 rounded-lg 
+                                                    hover:bg-green-700 transition-all duration-300 transform hover:shadow-lg text-sm md:text-base"
                                             >
                                                 عرض التفاصيل
                                             </motion.button>
@@ -146,16 +144,12 @@ const ProjectsSection = () => {
                                     </motion.div>
 
                                     <motion.div
-                                        className="md:w-1/2 relative overflow-hidden"
-                                        whileHover={{ scale: 1.05 }}
-                                        transition={{ duration: 0.4 }}
+                                        className="md:w-1/2 relative overflow-hidden group"
                                     >
                                         <motion.img
                                             src={currentProject?.image || 'placeholder-image-url'}
                                             alt={currentProject?.title}
-                                            className="w-full h-[300px] md:h-[500px] object-cover"
-                                            whileHover={{ scale: 1.05 }}
-                                            transition={{ duration: 0.4 }}
+                                            className="w-full h-[300px] md:h-[500px] object-cover transition-transform duration-500 group-hover:scale-110"
                                         />
                                         <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
                                     </motion.div>
@@ -163,16 +157,14 @@ const ProjectsSection = () => {
                             </motion.div>
                         </AnimatePresence>
 
-                        {/* Updated Progress Dots */}
-                        <div className="absolute bottom-[-40px] flex gap-3 justify-center">
+                        {/* Progress Dots */}
+                        <div className="absolute bottom-[-40px] flex justify-center gap-3">
                             {projects.map((_, index) => (
                                 <button
                                     key={index}
                                     onClick={() => setCurrentIndex(index)}
-                                    className={`h-3 rounded-full transition-all duration-300 ${currentIndex === index
-                                        ? 'bg-green-600 w-8'
-                                        : 'bg-gray-300 hover:bg-gray-400 w-3'
-                                        }`}
+                                    className={`w-2 md:w-3 h-2 md:h-3 rounded-full transition-all duration-300 
+                                        ${currentIndex === index ? 'bg-green-500 w-3 md:w-4 h-3 md:h-4' : 'bg-green-100'}`}
                                     aria-label={`Go to slide ${index + 1}`}
                                 />
                             ))}
@@ -194,30 +186,30 @@ const ProjectsSection = () => {
                                 animate={{ scale: 1, opacity: 1 }}
                                 exit={{ scale: 0.9, opacity: 0 }}
                                 transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                                className="bg-white rounded-2xl w-[90vw] h-[90vh] overflow-hidden shadow-2xl"
+                                className="bg-white rounded-2xl w-[95vw] md:w-[90vw] max-w-7xl h-[90vh] md:h-[80vh] overflow-hidden shadow-2xl"
                             >
                                 <div className="relative h-full">
                                     <button
                                         onClick={closeModal}
-                                        className="absolute top-4 left-4 bg-gray-100 p-2 rounded-full hover:bg-gray-200 transition-colors z-10"
+                                        className="absolute top-4 right-4 w-10 h-10 flex items-center justify-center bg-black/70 text-white rounded-full hover:bg-black transition-colors z-10"
                                     >
-                                        <X className="w-6 h-6 text-gray-700" />
+                                        <X size={24} />
                                     </button>
 
                                     <div className="grid md:grid-cols-2 h-full">
-                                        <div className="h-1/2 md:h-full">
+                                        <div className="order-2 md:order-1 h-full p-6 md:p-8 overflow-y-auto">
                                             <motion.img
                                                 src={selectedProject.image}
                                                 alt={selectedProject.title}
-                                                className="w-full h-full object-cover"
+                                                className="w-full h-[300px] md:h-full object-cover rounded-lg"
                                                 initial={{ opacity: 0 }}
                                                 animate={{ opacity: 1 }}
                                                 transition={{ delay: 0.2 }}
                                             />
                                         </div>
-                                        <div className="p-8 overflow-y-auto h-1/2 md:h-full">
+                                        <div className="order-1 md:order-2 p-6 md:p-8 overflow-y-auto flex flex-col text-center justify-center items-center " dir="rtl">
                                             <motion.h2
-                                                className="text-3xl font-bold mb-4 text-gray-800"
+                                                className="text-2xl md:text-3xl font-bold mb-4 text-gray-800"
                                                 initial={{ y: 20, opacity: 0 }}
                                                 animate={{ y: 0, opacity: 1 }}
                                                 transition={{ delay: 0.3 }}
@@ -225,18 +217,19 @@ const ProjectsSection = () => {
                                                 {selectedProject.title}
                                             </motion.h2>
                                             <motion.p
-                                                className="text-gray-600 mb-6"
+                                                className="text-gray-600 mb-6 text-base md:text-lg"
                                                 initial={{ y: 20, opacity: 0 }}
                                                 animate={{ y: 0, opacity: 1 }}
                                                 transition={{ delay: 0.4 }}
                                             >
                                                 {selectedProject.details}
                                             </motion.p>
-                                            <motion.button
+                                            <motion.button 
                                                 whileHover={{ scale: 1.05 }}
                                                 whileTap={{ scale: 0.95 }}
-                                                className="w-32 md:w-48 bg-green-600 text-white text-center py-3 md:py-4 rounded-lg hover:bg-green-700 transition-colors text-sm md:text-base">
-
+                                                className="mt-auto w-full md:w-48 bg-green-600 text-white text-center py-3 md:py-4 rounded-lg 
+                                                    hover:bg-green-700 transition-all duration-300 hover:shadow-lg text-sm md:text-base"
+                                            >
                                                 دعم المشروع
                                             </motion.button>
                                         </div>

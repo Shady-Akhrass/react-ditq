@@ -42,18 +42,18 @@ const Speech = () => {
         return (
             <div className="min-h-screen mt-64 py-16 px-4 sm:px-6 lg:px-8">
                 <div className="max-w-7xl mx-auto">
-                    <div className="animate-pulse">
-                        <div className="h-8 bg-gray-200 rounded w-1/3 mx-auto mb-8"></div>
-                        <div className="bg-white shadow-xl rounded-2xl p-8">
+                    <div className="space-y-8">
+                        <div className="skeleton-title w-1/3 mx-auto"></div>
+                        <div className="bg-white dark:bg-gray-800 shadow-xl rounded-2xl p-8">
                             <div className="flex flex-col md:flex-row gap-8">
-                                <div className="md:w-1/3">
-                                    <div className="w-40 h-40 rounded-full bg-gray-200 mx-auto"></div>
-                                    <div className="h-6 bg-gray-200 rounded w-1/2 mx-auto mt-4"></div>
+                                <div className="md:w-1/3 space-y-4">
+                                    <div className="skeleton-image w-40 h-40 rounded-full mx-auto"></div>
+                                    <div className="skeleton-text w-1/2 mx-auto"></div>
                                 </div>
                                 <div className="md:w-2/3 space-y-4">
-                                    <div className="h-6 bg-gray-200 rounded"></div>
-                                    <div className="h-4 bg-gray-200 rounded"></div>
-                                    <div className="h-4 bg-gray-200 rounded"></div>
+                                    <div className="skeleton-text w-full"></div>
+                                    <div className="skeleton-text w-5/6"></div>
+                                    <div className="skeleton-text w-4/6"></div>
                                 </div>
                             </div>
                         </div>
@@ -159,7 +159,7 @@ const Speech = () => {
                                         </h3>
                                         <div className="space-y-6">
                                             {speechData.speechs[0].speech.split('\n').map((paragraph, index) => (
-                                                <p key={index} className="text-xl leading-relaxed text-gray-700">
+                                                <p key={index} className="text-xl leading-relaxed text-gray-700 dark:text-gray-200">
                                                     {paragraph}
                                                 </p>
                                             ))}

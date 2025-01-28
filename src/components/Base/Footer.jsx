@@ -7,7 +7,7 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Company Info */}
           <div className="text-right">
-            <h3 className="text-xl font-bold mb-4 font-arabic">عن الدار</h3>
+            <h3 className="text-xl font-bold mb-4 font-arabic text-white">عن الدار</h3>
             <p className="text-sm text-emerald-200">
               دار الإتقان لتعليم القرآن هي مؤسسة تعليمية متخصصة في تعليم القرآن الكريم وعلومه، نسعى لتقديم أفضل الخدمات التعليمية لطلابنا.
             </p>
@@ -15,7 +15,7 @@ const Footer = () => {
 
           {/* Quick Links */}
           <div className="text-right">
-            <h3 className="text-xl font-bold mb-4 font-arabic">روابط سريعة</h3>
+            <h3 className="text-xl font-bold mb-4 font-arabic text-white">روابط سريعة</h3>
             <ul className="space-y-2">
               <li><a href="/" className="text-sm hover:text-white transition-colors">الرئيسية</a></li>
               <li><a href="/courses" className="text-sm hover:text-white transition-colors">الدورات</a></li>
@@ -27,7 +27,7 @@ const Footer = () => {
 
           {/* Contact Info */}
           <div className="text-right">
-            <h3 className="text-xl font-bold mb-4 font-arabic">معلومات التواصل</h3>
+            <h3 className="text-xl font-bold mb-4 font-arabic text-white">معلومات التواصل</h3>
             <div className="space-y-2 text-sm text-emerald-200">
               <p>البريد الإلكتروني: info@daritqan.com</p>
               <p>الهاتف: 972592889891+  </p>

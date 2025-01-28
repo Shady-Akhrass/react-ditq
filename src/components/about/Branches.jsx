@@ -1,10 +1,32 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import { Link } from 'react-router-dom';
 import { Home, ChevronLeft } from 'lucide-react';
 
-// import {image} from'../../assets/images/islamic-pattern';
+const LoadingState = () => (
+    <div className="min-h-screen mt-64 py-16 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
+            <div className="space-y-8">
+                <div className="skeleton-title w-1/3 mx-auto"></div>
+                <div className="skeleton-card h-[500px]"></div>
+                <div className="skeleton-text w-2/3 mx-auto"></div>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {[1,2,3,4,5].map(i => (
+                        <div key={i} className="skeleton-card h-24"></div>
+                    ))}
+                </div>
+            </div>
+        </div>
+    </div>
+);
+
 const Branches = () => {
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        setTimeout(() => setIsLoading(false), 1000);
+    }, []);
+
     const branches = [
         'فرع غزة',
         'فرع الوسطى',
@@ -12,6 +34,8 @@ const Branches = () => {
         'فرع خانيونس',
         'فرع رفح'
     ];
+
+    if (isLoading) return <LoadingState />;
 
     return (
         <>
@@ -68,9 +92,9 @@ const Branches = () => {
                                 {branches.map((branch, index) => (
                                     <div 
                                         key={index}
-                                        className="p-6 bg-gradient-to-br from-emerald-50 to-teal-50 rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300"
+                                        className="p-6 bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-emerald-900/30 dark:to-teal-900/20 rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300"
                                     >
-                                        <h3 className="text-xl font-bold text-emerald-800 text-center">
+                                        <h3 className="text-xl font-bold text-emerald-800 dark:text-emerald-400 text-center">
                                             {branch}
                                         </h3>
                                     </div>

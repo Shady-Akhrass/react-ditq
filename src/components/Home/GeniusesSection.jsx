@@ -91,13 +91,15 @@ const GeniusesSection = () => {
                                 flex flex-col md:flex-row items-stretch rounded-xl border-2 shadow-lg overflow-hidden
                                 transition-all duration-500 ease-in-out cursor-pointer origin-center
                                 ${isExpanded
-                                    ? 'fixed top-0 md:top-1/2 left-1/2 w-full md:w-[90%] h-full md:h-[80vh] z-50 bg-white'
+                                    ? 'fixed top-0 left-0 md:left-1/2 md:top-1/2 w-full h-full md:w-[90%] md:h-[80vh] z-50 bg-white'
                                     : 'w-full min-h-[500px] hover:scale-[1.02]'
                                 }
                             `}
                             style={{
                                 transform: isExpanded
-                                    ? `translate(-50%, ${window.innerWidth >= 768 ? '-50%' : '0'}) scale(1)`
+                                    ? window.innerWidth >= 768
+                                        ? 'translate(-50%, -50%) scale(1)'
+                                        : 'translate(0, 0) scale(1)'
                                     : 'translate(0, 0) scale(1)',
                                 transformOrigin: isExpanded
                                     ? `${clickPosition.x}px ${clickPosition.y}px`
@@ -109,7 +111,7 @@ const GeniusesSection = () => {
                                 transition-all duration-500 ease-out overflow-hidden
                                 order-1 md:order-3
                                 ${isExpanded
-                                    ? 'w-full md:w-1/2 h-48 md:h-full'
+                                    ? 'w-full h-[30vh] md:w-1/2 md:h-full'
                                     : 'w-full md:w-2/5 h-48 md:h-auto'
                                 }
                             `}>
@@ -136,12 +138,15 @@ const GeniusesSection = () => {
                             )}
 
                             <div className={`
-                                flex flex-col justify-center p-4 md:p-10 transition-all duration-500
-                                order-3 md:order-2 h-full
-                                ${isExpanded ? 'w-full md:w-1/2 overflow-y-auto' : 'flex-grow'}
+                                flex flex-col justify-start p-4 md:p-10 transition-all duration-500
+                                order-3 md:order-2
+                                ${isExpanded 
+                                    ? 'w-full h-[70vh] md:w-1/2 md:h-full overflow-y-auto pb-20'
+                                    : 'flex-grow'
+                                }
                             `}>
-                                <div className="flex flex-col items-center justify-center h-full w-full max-w-3xl mx-auto py-4 md:py-0 space-y-6 md:space-y-8">
-                                    <h3 className="font-semibold text-2xl md:text-3xl">
+                                <div className="flex flex-col items-center justify-start h-full w-full max-w-3xl mx-auto py-4 md:py-0 space-y-6 md:space-y-8">
+                                    <h3 className="font-semibold text-xl md:text-3xl">
                                         {isExpanded ? expandedGenius.name : currentGenius.name}
                                     </h3>
                                     <p className="text-base md:text-lg text-gray-600 leading-relaxed max-w-screen-2xl">
@@ -161,7 +166,7 @@ const GeniusesSection = () => {
                                         e.stopPropagation();
                                         setIsExpanded(false);
                                     }}
-                                    className="absolute top-2 right-2 w-8 md:w-10 h-8 md:h-10 flex items-center justify-center bg-black/70 text-white rounded-full hover:bg-black transition-colors text-xl md:text-2xl z-10"
+                                    className="absolute top-4 right-4 w-10 h-10 flex items-center justify-center bg-black/70 text-white rounded-full hover:bg-black transition-colors z-10"
                                 >
                                     ×
                                 </button>

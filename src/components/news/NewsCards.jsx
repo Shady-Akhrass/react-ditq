@@ -33,14 +33,11 @@ const AllNewsPage = () => {
     }, []);
 
     const generateDetailsUrl = (newsItem) => {
-        // Use a URL-friendly slug based on the title
         const slug = newsItem.title
-            .toLowerCase()
-            .replace(/[^\w\s-]/g, '')  // Remove non-word chars
-            .replace(/\s+/g, '-')      // Replace spaces with hyphens
-            .replace(/-+/g, '-');      // Replace multiple hyphens with single
+            .replace(/\s+/g, '-')
+            .replace(/-+/g, '-');
 
-        return `/news/${newsItem.id}/${slug}`;
+        return `/news/${slug}/details`;
     };
 
     const handlePageChange = (pageNumber) => {

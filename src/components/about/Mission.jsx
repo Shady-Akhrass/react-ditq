@@ -56,11 +56,11 @@ const MessageSection = () => {
         return (
             <div className="min-h-screen mt-64 py-16 px-4 sm:px-6 lg:px-8">
                 <div className="max-w-7xl mx-auto">
-                    <div className="animate-pulse space-y-8">
-                        <div className="h-8 bg-gray-200 rounded w-1/3 mx-auto"></div>
+                    <div className="space-y-8">
+                        <div className="skeleton-title w-1/3 mx-auto"></div>
                         <div className="grid gap-8 md:grid-cols-2">
-                            <div className="h-64 bg-gray-200 rounded-2xl"></div>
-                            <div className="h-64 bg-gray-200 rounded-2xl"></div>
+                            <div className="skeleton-card h-64 backdrop-blur-sm"></div>
+                            <div className="skeleton-card h-64 backdrop-blur-sm"></div>
                         </div>
                     </div>
                 </div>
@@ -132,15 +132,15 @@ const MessageSection = () => {
                                     whileHover="hover"
                                     className="relative group"
                                 >
-                                    <div className="absolute inset-0 bg-gradient-to-br from-emerald-100 to-teal-50 transform rotate-1 rounded-2xl transition-all duration-300 group-hover:rotate-2 group-hover:scale-105"></div>
-                                    <div className="relative bg-white/95 p-8 rounded-2xl shadow-lg backdrop-blur-sm">
+                                    <div className="absolute inset-0 bg-gradient-to-br from-emerald-100 to-teal-50 dark:from-emerald-900/40 dark:to-teal-900/40 transform rotate-1 rounded-2xl transition-all duration-300 group-hover:rotate-2 group-hover:scale-105"></div>
+                                    <div className="relative bg-white/95 dark:bg-gray-800/95 p-8 rounded-2xl shadow-lg backdrop-blur-sm">
                                         <div className="flex items-center mb-6">
                                             <div className="w-12 h-12 bg-emerald-100 rounded-full flex items-center justify-center mr-4">
                                                 <span className="text-2xl">🎯</span>
                                             </div>
                                             <h2 className="text-3xl font-bold bg-gradient-to-r from-emerald-600 to-teal-500 bg-clip-text text-transparent">رؤيتنا</h2>
                                         </div>
-                                        <p className="text-lg leading-relaxed text-gray-600 pr-4 border-r-2 border-emerald-500">{vision}</p>
+                                        <p className="text-lg leading-relaxed text-gray-600 dark:text-gray-200 pr-4 border-r-2 border-emerald-500">{vision}</p>
                                     </div>
                                 </motion.div>
 
@@ -150,15 +150,15 @@ const MessageSection = () => {
                                     whileHover="hover"
                                     className="relative group"
                                 >
-                                    <div className="absolute inset-0 bg-gradient-to-br from-yellow-100 to-amber-50 transform -rotate-1 rounded-2xl transition-all duration-300 group-hover:-rotate-2 group-hover:scale-105"></div>
-                                    <div className="relative bg-white/95 p-8 rounded-2xl shadow-lg backdrop-blur-sm">
+                                    <div className="absolute inset-0 bg-gradient-to-br from-yellow-100 to-amber-50 dark:from-yellow-900/40 dark:to-amber-900/40 transform -rotate-1 rounded-2xl transition-all duration-300 group-hover:-rotate-2 group-hover:scale-105"></div>
+                                    <div className="relative bg-white/95 dark:bg-gray-800/95 p-8 rounded-2xl shadow-lg backdrop-blur-sm">
                                         <div className="flex items-center mb-6">
                                             <div className="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center mr-4">
                                                 <span className="text-2xl">🚀</span>
                                             </div>
                                             <h2 className="text-3xl font-bold bg-gradient-to-r from-yellow-600 to-amber-500 bg-clip-text text-transparent">رسالتنا</h2>
                                         </div>
-                                        <p className="text-lg leading-relaxed text-gray-600 pr-4 border-r-2 border-yellow-500">{mission}</p>
+                                        <p className="text-lg leading-relaxed text-gray-600 dark:text-gray-200 pr-4 border-r-2 border-yellow-500">{mission}</p>
                                     </div>
                                 </motion.div>
                             </div>

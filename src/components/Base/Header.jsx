@@ -31,9 +31,9 @@ const Navbar = () => {
             id: 'about',
             submenu: [
                 { label: 'مجلس الإدارة', link: '/director', id: 'director' },
-                { label: 'الرؤية والرسالة', link: '/mission', id: 'mission' },
+                { label: 'الرؤية والرسالة', link: '/vision', id: 'vision' },
                 { label: 'كلمة رئيس الدار', link: '/speech', id: 'speech' },
-                { label: 'الفروع', link: '/branches', id: 'branches' }
+                { label: 'الفروع', link: '/branche', id: 'branche' }
             ]
         },
         {
@@ -41,11 +41,11 @@ const Navbar = () => {
             label: 'أقسام الدار',
             id: 'departments',
             submenu: [
-                { label: 'قسم تحفيظ القرآن الكريم', link: '/memorization-section', id: 'memorization' },
-                { label: 'قسم الدورات والتجويد والأسانيد', link: '/courses-section', id: 'course' },
-                { label: 'قسم ديوان الحفاظ', link: '/diwan-section', id: 'diwan' },
-                { label: 'قسم التربية والمواهب الإبداعية', link: '/creatives-section', id: 'creative' },
-                { label: 'قسم الأنشطة والمسابقة', link: '/activities-section', id: 'activity' }
+                { label: 'قسم تحفيظ القرآن الكريم', link: '/memorization', id: 'memorization' },
+                { label: 'قسم الدورات والتجويد والأسانيد', link: '/course', id: 'course' },
+                { label: 'قسم ديوان الحفاظ', link: '/diwan', id: 'diwan' },
+                { label: 'قسم التربية والمواهب الإبداعية', link: '/creative', id: 'creative' },
+                { label: 'قسم الأنشطة والمسابقة', link: '/activity', id: 'activity' }
             ]
         },
         {

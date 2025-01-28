@@ -1,5 +1,12 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { 
+    BrowserRouter as Router, 
+    Routes, 
+    Route, 
+    Navigate,
+    UNSAFE_DataRouterStateContext,
+    UNSAFE_useScrollRestoration 
+} from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import Header from './components/Base/Header';
 import AllNewsPage from './components/news/NewsCards';
@@ -20,7 +27,7 @@ import Mission from './components/About/Mission'
 function App() {
   return (
     <HelmetProvider>
-      <Router>
+      <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
         <div className="font-sans leading-normal tracking-normal">
           <Header />
           <main>
@@ -45,17 +52,18 @@ function App() {
                 element={<Home />}
               />
               <Route path="/news" element={<AllNewsPage />} />
-              <Route path="/news/:id/:slug" element={<NewsDetails />} />
-              <Route path="/activities-section" element={<ActivitiesSection />} />
-              <Route path="/diwan-section" element={<DiwanSection />} />
-              <Route path="/courses-section" element={<CoursesSection />} />
-              <Route path="/memorization-section" element={<MemorizationSection />} />
-              <Route path="/creatives-section" element={<CreativeSection />} />
+              <Route path="/news/:title/details" element={<NewsDetails />} />
+              <Route path="/:id/details" element={<NewsDetails />} /> {/* Add this new route */}
+              <Route path="/activity" element={<ActivitiesSection />} />
+              <Route path="/diwan" element={<DiwanSection />} />
+              <Route path="/course" element={<CoursesSection />} />
+              <Route path="/memorization" element={<MemorizationSection />} />
+              <Route path="/creative" element={<CreativeSection />} />
               <Route path="/clues" element={<Clues />} />
               <Route path="/contact-us" element={<ContactSection />} />
               <Route path="/speech" element={<Speech />} />
-              <Route path="/branches" element={<Branches />} />
-              <Route path="/mission" element={<Mission />} />
+              <Route path="/branche" element={<Branches />} />
+              <Route path="/vision" element={<Mission />} />
 
 
             </Routes>

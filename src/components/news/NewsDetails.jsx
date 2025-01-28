@@ -19,7 +19,7 @@ const carouselStyles = `
 `;
 
 const NewsDetails = () => {
-    const { id, slug } = useParams();
+    const { title } = useParams();
     const navigate = useNavigate();
     const [newsItem, setNewsItem] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -28,6 +28,53 @@ const NewsDetails = () => {
     const [prevNews, setPrevNews] = useState(null);
     const [copySuccess, setCopySuccess] = useState(false);
     const [isVisible, setIsVisible] = useState(false);
+
+    const fetchNewsDetails = async () => {
+        try {
+            const cachedNews = JSON.parse(localStorage.getItem('allNews') || '[]');
+
+            // Find news by matching the slug with generated title slug
+            const currentNews = cachedNews.find(news => {
+                const newsSlug = news.title
+                    .replace(/\s+/g, '-')
+                    .replace(/-+/g, '-');
+                return newsSlug === title;
+            });
+
+            if (currentNews) {
+                setNewsItem(currentNews);
+                const currentIndex = cachedNews.indexOf(currentNews);
+
+                if (currentIndex > 0) {
+                    setPrevNews(cachedNews[currentIndex - 1]);
+                }
+                if (currentIndex < cachedNews.length - 1) {
+                    setNextNews(cachedNews[currentIndex + 1]);
+                }
+            } else {
+                // Fallback to API if not in cache
+                const response = await axios.get('https://ditq.org/api/indexAPI');
+                const allNews = response?.data?.newss || [];
+
+                const foundNews = allNews.find(news => {
+                    const newsSlug = news.title
+                        .replace(/\s+/g, '-')
+                        .replace(/-+/g, '-');
+                    return newsSlug === title;
+                });
+
+                if (foundNews) {
+                    setNewsItem(foundNews);
+                    localStorage.setItem('allNews', JSON.stringify(allNews));
+                }
+            }
+        } catch (error) {
+            setError("Error fetching news details");
+        } finally {
+            setLoading(false);
+            setTimeout(() => setIsVisible(true), 100);
+        }
+    };
 
     useEffect(() => {
         const loadFacebookSDK = () => {
@@ -48,78 +95,48 @@ const NewsDetails = () => {
             }(document, 'script', 'facebook-jssdk'));
         };
 
-        loadFacebookSDK();
-    }, []);
-
-    useEffect(() => {
-        const fetchNewsDetails = async () => {
-            try {
+        const checkAndRedirect = async () => {
+            if (/^\/\d+\/details$/.test(window.location.pathname)) {
+                const id = window.location.pathname.split('/')[1];
                 const cachedNews = JSON.parse(localStorage.getItem('allNews') || '[]');
-
-                // Find news by ID, regardless of the current slug
-                const currentNews = cachedNews.find(news => news.id.toString() === id.toString());
-
-                if (currentNews) {
-                    // Redirect if current URL slug doesn't match the generated slug
-                    const correctSlug = currentNews.title
-                        .toLowerCase()
-                        .replace(/[^\w\s-]/g, '')
+                const newsItem = cachedNews.find(news => news.id.toString() === id);
+                
+                if (newsItem) {
+                    const titleSlug = newsItem.title
                         .replace(/\s+/g, '-')
                         .replace(/-+/g, '-');
-
-                    if (slug !== correctSlug) {
-                        navigate(`/news/${currentNews.id}/${correctSlug}`, { replace: true });
-                        return;
-                    }
-
-                    setNewsItem(currentNews);
-                    const currentIndex = cachedNews.findIndex(news => news.id.toString() === id.toString());
-
-                    if (currentIndex > 0) {
-                        setPrevNews(cachedNews[currentIndex - 1]);
-                    }
-                    if (currentIndex < cachedNews.length - 1) {
-                        setNextNews(cachedNews[currentIndex + 1]);
-                    }
-                } else {
-                    // Fallback to API if not in cache
-                    const response = await axios.get('https://ditq.org/api/indexAPI');
-                    const allNews = response?.data?.newss || [];
-                    const currentNews = allNews.find(news => news.id.toString() === id.toString());
-
-                    if (currentNews) {
-                        setNewsItem(currentNews);
-                        localStorage.setItem('allNews', JSON.stringify(allNews));
-                    }
+                    navigate(`/news/${titleSlug}/details`, { replace: true });
+                    return true;
                 }
-            } catch (error) {
-                setError("Error fetching news details");
-            } finally {
-                setLoading(false);
-                setTimeout(() => setIsVisible(true), 100);
+            }
+            return false;
+        };
+
+        const init = async () => {
+            loadFacebookSDK();
+            const shouldRedirect = await checkAndRedirect();
+            if (!shouldRedirect) {
+                await fetchNewsDetails();
             }
         };
 
-        fetchNewsDetails();
-    }, [id, slug, navigate]);
+        init();
+    }, [title, navigate]);
 
     const generateNewsUrl = (newsItem) => {
-        // Create URL-friendly slug
-        const friendlySlug = newsItem.title
-            .toLowerCase()
-            .replace(/[^\w\s-]/g, '')  // Remove non-word chars
-            .replace(/\s+/g, '-')      // Replace spaces with hyphens
-            .replace(/-+/g, '-');      // Replace multiple hyphens with single
-
-        return `/news/${newsItem.id}/${friendlySlug}`;
+        const slug = newsItem.title
+            .replace(/\s+/g, '-')
+            .replace(/-+/g, '-');
+        return `/news/${slug}/details`;
     };
 
     const copyShortLink = () => {
-        // Copy the full URL, including the current domain
-        const fullUrl = `${window.location.origin}/news/${newsItem.id}/${slug || generateNewsUrl(newsItem).split('/').pop()}`;
-        navigator.clipboard.writeText(fullUrl);
-        setCopySuccess(true);
-        setTimeout(() => setCopySuccess(false), 3000);
+        if (newsItem) {
+            const shortUrl = `${window.location.origin}/${newsItem.id}/details`;
+            navigator.clipboard.writeText(shortUrl);
+            setCopySuccess(true);
+            setTimeout(() => setCopySuccess(false), 3000);
+        }
     };
 
     const formatDate = (dateString) => {
@@ -159,6 +176,7 @@ const NewsDetails = () => {
     return (
         <>
             <Helmet>
+                <title>{newsItem.title}</title>
                 <title>{newsItem.title}</title>
                 <meta name="description" content={newsItem.object.substring(0, 160)} />
                 <meta property="og:title" content={newsItem.title} />

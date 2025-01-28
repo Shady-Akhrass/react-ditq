@@ -117,9 +117,8 @@ const NewsCard = ({ newsItem, generateDetailsUrl }) => {
                 <h3 className="text-lg font-bold text-gray-900 mb-2 h-[60%] overflow-hidden">{newsItem.title}</h3>
                 <p className="text-gray-600 text-sm mb-4">{newsItem.created_at.slice(0, 10)}</p>
                 <motion.button
-                    className="bg-yellow-500 text-white font-semibold py-2 px-4 rounded-lg shadow-md w-full mt-auto"
+                    className="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-lg shadow-md w-full mt-auto"
                     whileHover={{
-                        backgroundColor: "#B45309",
                         scale: 1.03
                     }}
                     transition={{ duration: 0.2 }}
