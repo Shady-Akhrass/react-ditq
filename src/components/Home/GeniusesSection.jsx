@@ -1,6 +1,44 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Helmet } from 'react-helmet';
 
+const SkeletonCard = () => (
+  <div className="w-full min-h-[500px] rounded-xl border-2 shadow-lg overflow-hidden transition-all duration-300 hover:scale-[1.02] bg-white">
+    <div className="flex flex-col md:flex-row h-full">
+      <div className="w-full md:w-2/5 h-48 md:h-auto bg-gray-200 animate-pulse">
+        <div className="w-full h-full relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 skeleton-shine" />
+        </div>
+      </div>
+      
+      <div className="flex-grow p-4 md:p-10">
+        <div className="flex flex-col items-center justify-start h-full space-y-6 md:space-y-8">
+          <div className="w-3/4 h-8 bg-gray-200 rounded-lg animate-pulse">
+            <div className="w-full h-full relative overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 skeleton-shine" />
+            </div>
+          </div>
+          
+          <div className="space-y-4 w-full">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="w-full h-4 bg-gray-200 rounded animate-pulse">
+                <div className="w-full h-full relative overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 skeleton-shine" />
+                </div>
+              </div>
+            ))}
+          </div>
+          
+          <div className="w-32 md:w-48 h-12 bg-gray-200 rounded-lg animate-pulse">
+            <div className="w-full h-full relative overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 skeleton-shine" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+);
+
 const GeniusesSection = () => {
     const [geniuses, setGeniuses] = useState([]);
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -12,7 +50,7 @@ const GeniusesSection = () => {
     const [clickPosition, setClickPosition] = useState({ x: 0, y: 0 });
 
     useEffect(() => {
-        fetch('https://ditq.org/api/indexAPI')
+        fetch('https://api.ditq.org/api/home/API')
             .then(response => response.json())
             .then(data => {
                 if (data && data.geniuses) {
@@ -51,12 +89,29 @@ const GeniusesSection = () => {
 
     if (isLoading) return (
         <div className="flex items-center justify-center min-h-screen">
-            <div className="text-xl">Loading...</div>
+            <style>
+                {`
+                    @keyframes shine {
+                        to {
+                            transform: translateX(100%);
+                        }
+                    }
+                    
+                    .skeleton-shine {
+                        animation: shine 1.5s infinite;
+                    }
+                `}
+            </style>
+            <div className="container mx-auto px-4">
+                <h2 className="text-3xl md:text-4xl font-bold text-center mb-8 md:mb-16 text-gray-800">نوابغ الإتقان</h2>
+                <SkeletonCard />
+            </div>
         </div>
     );
 
     const currentGenius = geniuses[currentIndex];
 
+    // Rest of your component remains the same...
     return (
         <>
             <Helmet>
@@ -71,7 +126,6 @@ const GeniusesSection = () => {
                 <meta name="twitter:description" content={currentGenius ? currentGenius.details : "تعرف على نوابغ الإتقان وقصص نجاحهم."} />
                 <meta name="twitter:image" content={currentGenius?.image || "URL_to_default_image"} />
             </Helmet>
-
 
             {isExpanded && (
                 <div

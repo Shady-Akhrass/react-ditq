@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet';
 import { Link } from 'react-router-dom';
 import { Home, ChevronLeft } from 'lucide-react';
 // Add this import at the top
-import backgroundPattern from '../../assets/images/islamic-pattern.jpg';
+// import backgroundPattern from '../../assets/images/islamic-pattern.jpg';
 
 const Speech = () => {
     const [speechData, setSpeechData] = useState(null);
@@ -11,7 +11,7 @@ const Speech = () => {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        fetch('https://ditq.org/api/speech')
+        fetch('https://api.ditq.org/api/speech')
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
@@ -35,7 +35,7 @@ const Speech = () => {
         // Replace backslashes with forward slashes
         const formattedPath = imagePath.replace(/\\/g, '/');
         // Construct the full URL - adjust the base URL according to your API
-        return `https://ditq.org/storage/${formattedPath}`;
+        return `https://api.ditq.org/storage/${formattedPath}`;
     };
 
     if (isLoading) {
@@ -97,7 +97,7 @@ const Speech = () => {
             <div className="relative min-h-screen bg-warm-gray-50 py-24 px-4 sm:px-6 lg:px-8">
                 <div 
                     className="absolute inset-0 opacity-5 pointer-events-none"
-                    style={{ backgroundImage: `url(${backgroundPattern})` }}
+                    // style={{ backgroundImage: `url(${backgroundPattern})` }}
                 ></div>
 
                 <div className="max-w-7xl mx-auto">

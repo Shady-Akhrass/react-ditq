@@ -6,7 +6,7 @@ const FeaturedBrandCarousel = () => {
 
     useEffect(() => {
         // Fetch data from the API endpoint
-        axios.get('https://ditq.org/api/indexAPI')
+        axios.get('https://api.ditq.org/api/indexAPI')
             .then((response) => {
                 setImages(response.data.successPartners);
                 // console.error(response)

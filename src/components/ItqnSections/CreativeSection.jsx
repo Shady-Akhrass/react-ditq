@@ -27,7 +27,7 @@ const CreativeSection = () => {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        axios.get('https://ditq.org/api/creative/API')
+        axios.get('https://api.ditq.org/api/creative/API')
             .then(response => {
                 const creativeData = Array.isArray(response.data) ? response.data : [response.data];
                 setCreatives(creativeData);
@@ -63,7 +63,7 @@ const CreativeSection = () => {
                 <meta property="og:description" content={metaDescription} />
                 <meta property="og:type" content="website" />
                 {creatives.length > 0 && creatives[0].creative_images && creatives[0].creative_images.length > 0 && (
-                    <meta property="og:image" content={`https://ditq.org/storage/${creatives[0].creative_images[0].image}`} />
+                    <meta property="og:image" content={`https://api.ditq.org/storage/${creatives[0].creative_images[0].image}`} />
                 )}
             </Helmet>
             <style>{carouselStyles}</style>
@@ -132,7 +132,7 @@ const CreativeSection = () => {
                                     {creative.creative_images.map(image => (
                                         <div key={image.id} className="relative aspect-video">
                                             <img
-                                                src={`https://ditq.org/storage/${image.image}`}
+                                                src={`https://api.ditq.org/storage/${image.image}`}
                                                 alt="Creative"
                                                 className="w-full h-full object-cover"
                                             />

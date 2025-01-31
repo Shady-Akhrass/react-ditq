@@ -27,7 +27,7 @@ const DiwanSection = () => {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        axios.get('https://ditq.org/api/diwan/API')
+        axios.get('https://api.ditq.org/api/diwan/API')
             .then(response => {
                 const diwanData = Array.isArray(response.data) ? response.data : [response.data];
                 setDiwans(diwanData);
@@ -63,7 +63,7 @@ const DiwanSection = () => {
                 <meta property="og:description" content={metaDescription} />
                 <meta property="og:type" content="website" />
                 {diwans.length > 0 && diwans[0].diwan_images && diwans[0].diwan_images.length > 0 && (
-                    <meta property="og:image" content={`https://ditq.org/storage/${diwans[0].diwan_images[0].image}`} />
+                    <meta property="og:image" content={`https://api.ditq.org/storage/${diwans[0].diwan_images[0].image}`} />
                 )}
             </Helmet>
             <style>{carouselStyles}</style>
@@ -132,7 +132,7 @@ const DiwanSection = () => {
                                     {diwan.diwan_images.map(image => (
                                         <div key={image.id} className="relative aspect-video">
                                             <img
-                                                src={`https://ditq.org/storage/${image.image}`}
+                                                src={`https://api.ditq.org/storage/${image.image}`}
                                                 alt="Diwan"
                                                 className="w-full h-full object-cover"
                                             />

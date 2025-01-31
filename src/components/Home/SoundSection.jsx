@@ -9,7 +9,7 @@ const SoundSection = () => {
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        axios.get('https://ditq.org/api/indexAPI')
+        axios.get('https://api.ditq.org/api/home/API')
             .then((response) => {
                 if (response.data && response.data.sound && response.data.sound.length > 0) {
                     setSoundData(response.data.sound[0]); // Get first item from array
@@ -69,6 +69,7 @@ const SoundSection = () => {
                                 src={soundCloud}
                                 alt="SoundCloud App"
                                 className="max-w-full h-auto max-h-[450px] object-contain rounded-2xl shadow-md"
+                                loading="lazy"
                                 onError={(e) => {
                                     e.target.onerror = null;
                                     e.target.src = soundCloud;

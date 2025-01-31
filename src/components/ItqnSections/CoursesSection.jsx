@@ -27,7 +27,7 @@ const CoursesSection = () => {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        axios.get('https://ditq.org/api/course/API')
+        axios.get('https://api.ditq.org/api/course/API')
             .then(response => {
                 const coursesData = Array.isArray(response.data) ? response.data : [response.data];
                 setCourses(coursesData);
@@ -63,7 +63,7 @@ const CoursesSection = () => {
                 <meta property="og:description" content={metaDescription} />
                 <meta property="og:type" content="website" />
                 {courses.length > 0 && courses[0].course_images && courses[0].course_images.length > 0 && (
-                    <meta property="og:image" content={`https://ditq.org/storage/${courses[0].course_images[0].image}`} />
+                    <meta property="og:image" content={`https://api.ditq.org/storage/${courses[0].course_images[0].image}`} />
                 )}
             </Helmet>
             <style>{carouselStyles}</style>
@@ -132,7 +132,7 @@ const CoursesSection = () => {
                                     {course.course_images.map(image => (
                                         <div key={image.id} className="relative aspect-video">
                                             <img
-                                                src={`https://ditq.org/storage/${image.image}`}
+                                                src={`https://api.ditq.org/storage/${image.image}`}
                                                 alt="Course"
                                                 className="w-full h-full object-cover"
                                             />

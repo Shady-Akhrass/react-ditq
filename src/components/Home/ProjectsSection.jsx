@@ -14,7 +14,7 @@ const ProjectsSection = () => {
     const [selectedProject, setSelectedProject] = useState(null);
 
     useEffect(() => {
-        axios.get('https://ditq.org/api/indexAPI')
+        axios.get('https://api.ditq.org/api/home/API')
             .then((response) => {
                 setProjects(response.data.donate || []);
             })
@@ -77,7 +77,6 @@ const ProjectsSection = () => {
                 {selectedProject?.image && <meta property="og:image" content={selectedProject.image} />}
             </Helmet>
 
-
             <section className="relative py-24 min-h-screen overflow-hidden">
                 <div className="container mx-auto relative px-4">
                     <motion.h2
@@ -105,51 +104,53 @@ const ProjectsSection = () => {
                                         boxShadow: "0 25px 30px -5px rgba(0, 0, 0, 0.15)"
                                     }}
                                     transition={{ duration: 0.3 }}
-                                    className="bg-white rounded-2xl shadow-xl overflow-hidden flex flex-col-reverse md:flex-row-reverse"
+                                    className="bg-white rounded-2xl shadow-xl overflow-hidden flex flex-col-reverse md:flex-row-reverse h-[500px]"
                                 >
                                     <motion.div
-                                        className="md:w-1/2 p-8 md:p-12 flex flex-col justify-center"
+                                        className="md:w-1/2 p-8 md:p-12 flex flex-col justify-center items-center"
                                         whileHover={{ backgroundColor: "#f8fafc" }}
                                         transition={{ duration: 0.2 }}
                                     >
-                                        <motion.h3
-                                            className="text-2xl md:text-3xl font-bold mb-4 md:mb-6 text-gray-800 text-center md:text-right"
-                                            initial={{ opacity: 0 }}
-                                            animate={{ opacity: 1 }}
-                                            transition={{ delay: 0.2 }}
-                                        >
-                                            {currentProject?.title}
-                                        </motion.h3>
-
-                                        <motion.p
-                                            className="text-base md:text-lg text-gray-600 mb-6 md:mb-8 text-center md:text-right line-clamp-3"
-                                            initial={{ opacity: 0 }}
-                                            animate={{ opacity: 1 }}
-                                            transition={{ delay: 0.3 }}
-                                        >
-                                            {currentProject?.details}
-                                        </motion.p>
-
-                                        <div className="flex justify-center md:justify-start space-x-4">
-                                            <motion.button
-                                                onClick={() => openModal(currentProject)}
-                                                whileHover={{ scale: 1.05 }}
-                                                whileTap={{ scale: 0.95 }}
-                                                className="w-32 md:w-48 bg-green-600 text-white text-center py-3 md:py-4 rounded-lg 
-                                                    hover:bg-green-700 transition-all duration-300 transform hover:shadow-lg text-sm md:text-base"
+                                        <div className="flex flex-col items-center justify-center h-full w-full">
+                                            <motion.h3
+                                                className="text-2xl md:text-3xl font-bold mb-4 md:mb-6 text-gray-800 text-center"
+                                                initial={{ opacity: 0 }}
+                                                animate={{ opacity: 1 }}
+                                                transition={{ delay: 0.2 }}
                                             >
-                                                عرض التفاصيل
-                                            </motion.button>
+                                                {currentProject?.title}
+                                            </motion.h3>
+
+                                            <motion.p
+                                                className="text-base md:text-lg text-gray-600 mb-6 md:mb-8 text-center line-clamp-3"
+                                                initial={{ opacity: 0 }}
+                                                animate={{ opacity: 1 }}
+                                                transition={{ delay: 0.3 }}
+                                            >
+                                                {currentProject?.details}
+                                            </motion.p>
+
+                                            <div className="flex justify-center">
+                                                <motion.button
+                                                    onClick={() => openModal(currentProject)}
+                                                    whileHover={{ scale: 1.05 }}
+                                                    whileTap={{ scale: 0.95 }}
+                                                    className="w-32 md:w-48 bg-green-600 text-white text-center py-3 md:py-4 rounded-lg 
+                                                        hover:bg-green-700 transition-all duration-300 transform hover:shadow-lg text-sm md:text-base"
+                                                >
+                                                    عرض التفاصيل
+                                                </motion.button>
+                                            </div>
                                         </div>
                                     </motion.div>
 
-                                    <motion.div
-                                        className="md:w-1/2 relative overflow-hidden group"
-                                    >
+                                    {/* Modal content update */}
+                                    <motion.div className="md:w-1/2 relative overflow-hidden group h-full">
                                         <motion.img
                                             src={currentProject?.image || 'placeholder-image-url'}
                                             alt={currentProject?.title}
-                                            className="w-full h-[300px] md:h-[500px] object-cover transition-transform duration-500 group-hover:scale-110"
+                                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                                            loading="lazy"
                                         />
                                         <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
                                     </motion.div>
@@ -197,41 +198,44 @@ const ProjectsSection = () => {
                                     </button>
 
                                     <div className="grid md:grid-cols-2 h-full">
-                                        <div className="order-2 md:order-1 h-full p-6 md:p-8 overflow-y-auto">
+                                        <div className="order-2 md:order-1 h-full p-6 md:p-8 overflow-y-auto flex items-center justify-center">
                                             <motion.img
                                                 src={selectedProject.image}
                                                 alt={selectedProject.title}
-                                                className="w-full h-[300px] md:h-full object-cover rounded-lg"
+                                                className="w-full h-auto max-h-full object-cover rounded-lg"
                                                 initial={{ opacity: 0 }}
                                                 animate={{ opacity: 1 }}
                                                 transition={{ delay: 0.2 }}
+                                                loading="lazy"
                                             />
                                         </div>
-                                        <div className="order-1 md:order-2 p-6 md:p-8 overflow-y-auto flex flex-col text-center justify-center items-center " dir="rtl">
-                                            <motion.h2
-                                                className="text-2xl md:text-3xl font-bold mb-4 text-gray-800"
-                                                initial={{ y: 20, opacity: 0 }}
-                                                animate={{ y: 0, opacity: 1 }}
-                                                transition={{ delay: 0.3 }}
-                                            >
-                                                {selectedProject.title}
-                                            </motion.h2>
-                                            <motion.p
-                                                className="text-gray-600 mb-6 text-base md:text-lg"
-                                                initial={{ y: 20, opacity: 0 }}
-                                                animate={{ y: 0, opacity: 1 }}
-                                                transition={{ delay: 0.4 }}
-                                            >
-                                                {selectedProject.details}
-                                            </motion.p>
-                                            <motion.button 
-                                                whileHover={{ scale: 1.05 }}
-                                                whileTap={{ scale: 0.95 }}
-                                                className="mt-auto w-full md:w-48 bg-green-600 text-white text-center py-3 md:py-4 rounded-lg 
-                                                    hover:bg-green-700 transition-all duration-300 hover:shadow-lg text-sm md:text-base"
-                                            >
-                                                دعم المشروع
-                                            </motion.button>
+                                        <div className="order-1 md:order-2 p-6 md:p-8 overflow-y-auto flex flex-col items-center justify-center" dir="rtl">
+                                            <div className="flex flex-col items-center justify-center h-full max-w-lg w-full mx-auto">
+                                                <motion.h2
+                                                    className="text-2xl md:text-3xl font-bold mb-4 text-gray-800 text-center"
+                                                    initial={{ y: 20, opacity: 0 }}
+                                                    animate={{ y: 0, opacity: 1 }}
+                                                    transition={{ delay: 0.3 }}
+                                                >
+                                                    {selectedProject.title}
+                                                </motion.h2>
+                                                <motion.p
+                                                    className="text-gray-600 mb-6 text-base md:text-lg text-center"
+                                                    initial={{ y: 20, opacity: 0 }}
+                                                    animate={{ y: 0, opacity: 1 }}
+                                                    transition={{ delay: 0.4 }}
+                                                >
+                                                    {selectedProject.details}
+                                                </motion.p>
+                                                <motion.button 
+                                                    whileHover={{ scale: 1.05 }}
+                                                    whileTap={{ scale: 0.95 }}
+                                                    className="w-full md:w-48 bg-green-600 text-white text-center py-3 md:py-4 rounded-lg 
+                                                        hover:bg-green-700 transition-all duration-300 hover:shadow-lg text-sm md:text-base"
+                                                >
+                                                    دعم المشروع
+                                                </motion.button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

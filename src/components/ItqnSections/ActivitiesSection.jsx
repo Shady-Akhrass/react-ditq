@@ -49,7 +49,7 @@ const ActivitiesSection = () => {
     }, []);
 
     useEffect(() => {
-        axios.get('https://ditq.org/api/activity/API')
+        axios.get('https://api.ditq.org/api/activity/API')
             .then(response => {
                 const activitiesData = Array.isArray(response.data) ? response.data : [response.data];
                 setActivities(activitiesData);
@@ -85,7 +85,7 @@ const ActivitiesSection = () => {
                 <meta property="og:description" content={metaDescription} />
                 <meta property="og:type" content="website" />
                 {activities.length > 0 && activities[0].activities_images && activities[0].activities_images.length > 0 && (
-                    <meta property="og:image" content={`https://ditq.org/storage/${activities[0].activities_images[0].image}`} />
+                    <meta property="og:image" content={`https://api.ditq.org/storage/${activities[0].activities_images[0].image}`} />
                 )}
             </Helmet>
             <style>{carouselStyles}</style>
@@ -154,7 +154,7 @@ const ActivitiesSection = () => {
                                     {activity.activities_images.map(image => (
                                         <div key={image.id} className="relative aspect-video">
                                             <img
-                                                src={`https://ditq.org/storage/${image.image}`}
+                                                src={`https://api.ditq.org/storage/${image.image}`}
                                                 alt="Activity"
                                                 className="w-full h-full object-cover"
                                             />

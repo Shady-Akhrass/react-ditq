@@ -13,7 +13,7 @@ const NewsSection = () => {
     useEffect(() => {
         const fetchNews = async () => {
             try {
-                const response = await axios.get('https://ditq.org/api/indexAPI');
+                const response = await axios.get('https://api.ditq.org/api/home/API');
                 const latestNews = response?.data?.newss?.slice(-4).reverse() || [];
                 setNews(latestNews);
             } catch (error) {
@@ -66,7 +66,7 @@ const NewsSection = () => {
     return (
         <section className="py-8">
             <Helmet>
-                {/* <title>News - Your Website</title> */}
+                <title>الأخبار - دار الإتقان</title>
                 <meta name="description" content="Description of your website's news section." />
                 <meta property="og:title" content="News - Your Website" />
                 <meta property="og:description" content="Description of your website's news section." />

@@ -13,7 +13,7 @@ const MessageSection = () => {
     const [activeCard, setActiveCard] = useState(null);
 
     useEffect(() => {
-        axios.get('https://ditq.org/api/indexAPI')
+        axios.get('https://api.ditq.org/api/home/API')
             .then((response) => {
                 setVision(response.data.homes[0].vision);
                 setMission(response.data.homes[0].mission);
@@ -92,7 +92,7 @@ const MessageSection = () => {
             </Helmet>
 
             <div className="relative min-h-screen bg-gradient-to-b from-warm-gray-50 to-white py-24 px-4 sm:px-6 lg:px-8">
-                <div className="absolute inset-0 opacity-5 bg-[url('/../../assets/images/islamic-pattern')] bg-repeat pointer-events-none"></div>
+                <div className="absolute inset-0 opacity-5 bg-[url('/../../assets')] bg-repeat pointer-events-none"></div>
 
                 <motion.div
                     className="max-w-7xl mx-auto"

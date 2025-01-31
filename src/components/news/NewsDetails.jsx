@@ -53,7 +53,7 @@ const NewsDetails = () => {
                 }
             } else {
                 // Fallback to API if not in cache
-                const response = await axios.get('https://ditq.org/api/indexAPI');
+                const response = await axios.get('https://api.ditq.org/api/indexAPI');
                 const allNews = response?.data?.newss || [];
 
                 const foundNews = allNews.find(news => {
@@ -271,7 +271,7 @@ const NewsDetails = () => {
                                 {newsItem.subphotos1 && (
                                     <div className="relative aspect-video overflow-hidden">
                                         <img
-                                            src={`https://ditq.org/storage/${newsItem.subphotos1}`}
+                                            src={`https://api.ditq.org/storage/${newsItem.subphotos1}`}
                                             alt="Additional content"
                                             className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-500"
                                         />

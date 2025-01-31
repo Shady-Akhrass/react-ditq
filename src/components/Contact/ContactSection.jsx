@@ -43,7 +43,7 @@ const ContactSection = () => {
         setIsLoading(true);
 
         try {
-            const response = await fetch('/contact-us/send-email', {
+            const response = await fetch('api.ditq.org/contact-us/send-email', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

@@ -9,7 +9,7 @@ const MessageSection = () => {
     const [activeCard, setActiveCard] = useState(null);
 
     useEffect(() => {
-        axios.get('https://ditq.org/api/indexAPI')
+        axios.get('https://api.ditq.org/api/home/API')
             .then((response) => {
                 setVision(response.data.homes[0].vision);
                 setMission(response.data.homes[0].mission);
@@ -42,9 +42,9 @@ const MessageSection = () => {
 
             <section className="relative py-16  overflow-hidden">
                 <div className="container mx-auto px-4 relative z-10">
-                    <h1 className="text-4xl font-bold text-center mb-16 text-gray-800">
+                    <h2 className="text-4xl font-bold text-center mb-16 text-gray-800">
                         <span className="text-green-600">رؤيتنا</span> ورسالتنا
-                    </h1>
+                    </h2>
 
                     <div className="flex flex-col lg:flex-row justify-center items-center gap-8 lg:gap-16">
                         {/* Mission Card */}

@@ -213,35 +213,43 @@ const Navbar = () => {
             </Helmet>
 
             <header className={`fixed top-0 w-full z-50 transition-all duration-300 ${isScrolled ? 'dark:bg-gray-800 bg-white shadow-md' : 'bg-transparent'}`}>
-                <nav className="container mx-auto flex items-center justify-between px-6 py-2" dir="rtl">
-                    <div className="flex items-center justify-between w-screen" dir='rtl'>
+                <nav className="container mx-auto flex items-center justify-between px-4 py-2" dir="rtl">
+                    <div className="flex items-center justify-between w-full" dir='rtl'>
+                        {/* Left side group for mobile */}
+                        <div className="flex items-center gap-2">
+                            {/* Mobile Menu Button */}
+                            <button
+                                className="lg:hidden text-2xl bg-white dark:bg-gray-800 dark:text-white px-2 py-2 rounded"
+                                onClick={() => setNavOpen(!navOpen)}
+                            >
+                                {navOpen ? <FaTimes /> : <FaBars />}
+                            </button>
 
-
-                        {/* Mobile Menu Button */}
-                        <button
-                            className="lg:hidden text-2xl bg-white px-2 py-2 rounded left-0"
-                            onClick={() => setNavOpen(!navOpen)}
-                        >
-                            {navOpen ? <FaTimes /> : <FaBars />}
-                        </button>
+                            {/* Dark Mode Toggle - mobile only */}
+                            <button
+                                onClick={toggleDarkMode}
+                                className="lg:hidden p-2 rounded-full bg-white dark:bg-gray-700 text-gray-800 dark:text-yellow-300 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors duration-200" dir='ltr'
+                            >
+                                {isDarkMode ? <FaSun /> : <FaMoon />}
+                            </button>
+                        </div>
 
                         {/* Logo */}
-                        <div className="logo bg-white rounded-full">
+                        <div className="logo bg-white rounded-full mx-2">
                             <Link to="/home" onClick={() => handleItemClick('home')}>
-                                <img src={Logo} alt="Logo" className="h-14 ml-2 mr-2" />
+                                <img src={Logo} alt="Logo" className="h-12 md:h-14" />
                             </Link>
                         </div>
 
-
                         {/* Desktop Menu */}
-                        <div className="hidden lg:flex items-center justify-left space-x-8 space-x-reverse bg-white dark:bg-gray-800 rounded-full p-2 px-8 w-max mx-auto my-auto">
+                        <div className="hidden lg:flex items-center space-x-8 space-x-reverse bg-white dark:bg-gray-800 rounded-full p-2 px-8 flex-nowrap">
                             {menuItems.map((item) => (
-                                <div key={item.id} className="relative">
+                                <div key={item.id} className="relative whitespace-nowrap">
                                     {item.submenu ? (
                                         <div>
                                             <button
                                                 onClick={() => toggleDropdown(item.id)}
-                                                className={`flex items-center text-lg font-medium hover:text-green-600 dark:hover:text-yellow-400 ${openDropdown === item.id ? 'text-green-600 dark:text-yellow-400' : 'dark:text-white'}`}
+                                                className={`flex items-center text-lg font-medium hover:text-green-600 dark:hover:text-yellow-400 whitespace-nowrap ${openDropdown === item.id ? 'text-green-600 dark:text-yellow-400' : 'dark:text-white'}`}
                                             >
                                                 {item.label} <FaChevronDown className="mr-2" />
                                             </button>
@@ -251,7 +259,7 @@ const Navbar = () => {
                                                         <li key={subItem.id}>
                                                             <Link
                                                                 to={subItem.link}
-                                                                className={`block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 ${selectedItem === subItem.id ? 'bg-green-100 dark:bg-gray-700 text-green-600 dark:text-yellow-400' : 'dark:text-white'}`}
+                                                                className={`block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 whitespace-nowrap ${selectedItem === subItem.id ? 'bg-green-100 dark:bg-gray-700 text-green-600 dark:text-yellow-400' : 'dark:text-white'}`}
                                                                 onClick={() => handleItemClick(subItem.id, item.id)}
                                                             >
                                                                 {subItem.label}
@@ -264,7 +272,7 @@ const Navbar = () => {
                                     ) : (
                                         <Link
                                             to={item.link}
-                                            className={`text-lg font-medium hover:text-green-600 dark:hover:text-yellow-400 ${selectedItem === item.id ? 'text-green-600 dark:text-yellow-400' : 'dark:text-white'}`}
+                                            className={`text-lg font-medium hover:text-green-600 dark:hover:text-yellow-400 whitespace-nowrap ${selectedItem === item.id ? 'text-green-600 dark:text-yellow-400' : 'dark:text-white'}`}
                                             onClick={() => handleItemClick(item.id)}
                                         >
                                             {item.label}
@@ -277,16 +285,52 @@ const Navbar = () => {
                                 href="https://wa.me/+972592889891"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="bg-green-400 dark:bg-yellow-400 text-white dark:text-gray-900 px-4 py-2 rounded-full text-lg hover:bg-green-600 dark:hover:bg-yellow-500 transition-colors duration-300"
+                                className="bg-green-400 dark:bg-yellow-400 text-white dark:text-gray-900 px-4 py-2 rounded-full text-lg hover:bg-green-600 dark:hover:bg-yellow-500 transition-colors duration-300 whitespace-nowrap"
                             >
                                 تبرع لنا
                             </a>
+                        </div>
+
+                        {/* Right side group for desktop */}
+                        <div className="hidden lg:flex items-center gap-4">
+                            {/* Dark Mode Toggle - desktop only */}
+                            <button
+                                onClick={toggleDarkMode}
+                                className="p-2 rounded-full bg-white dark:bg-gray-700 text-gray-800 dark:text-yellow-300 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors duration-200 ml-8"
+                            >
+                                {isDarkMode ? <FaSun /> : <FaMoon />}
+                            </button>
+
+                            {/* Search Box */}
+                            <form onSubmit={handleSearch} className="search-box">
+                                <div className="relative">
+                                    <input
+                                        type="search"
+                                        value={searchQuery}
+                                        onChange={(e) => setSearchQuery(e.target.value)}
+                                        placeholder="بحث..."
+                                        className="border border-gray-300 dark:border-gray-600 rounded-full px-4 py-2 pr-10 w-64 focus:outline-none focus:ring-2 focus:ring-green-500 dark:focus:ring-yellow-400 dark:bg-gray-700 dark:text-white"
+                                        disabled={isSearching}
+                                    />
+                                    <button
+                                        type="submit"
+                                        disabled={isSearching}
+                                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-green-600"
+                                    >
+                                        {isSearching ? (
+                                            <div className="w-5 h-5 border-t-2 border-green-500 border-solid rounded-full animate-spin" />
+                                        ) : (
+                                            <FiSearch className="w-5 h-5" />
+                                        )}
+                                    </button>
+                                </div>
+                            </form>
                         </div>
                     </div>
 
                     {/* Mobile Menu */}
                     <div
-                        className={`fixed inset-0 bg-white z-50 lg:hidden transition-transform duration-300 transform ${navOpen ? 'translate-x-0' : 'translate-x-full'}`}
+                        className={`fixed inset-0 bg-white dark:bg-gray-800 z-50 lg:hidden transition-transform duration-300 transform ${navOpen ? 'translate-x-0' : 'translate-x-full'}`}
                     >
                         <div className="flex justify-between items-right p-6 border-b">
                             <button
@@ -348,41 +392,6 @@ const Navbar = () => {
                             </a>
                         </div>
                     </div>
-                    {/* Dark Mode Toggle */}
-                    <button
-                        onClick={toggleDarkMode}
-                        className="p-2 rounded-full bg-white dark:bg-gray-700 text-gray-800 dark:text-yellow-300 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors duration-200 ml-16"
-                    >
-                        {isDarkMode ? <FaSun /> : <FaMoon />}
-                    </button>
-                    {/* Search Box */}
-
-                    <form
-                        onSubmit={handleSearch}
-                        className={`search-box hidden lg:flex items-center transition-all duration-300 rounded-full ${isScrolled ? 'bg-white dark:bg-gray-800 shadow-md' : 'bg-transparent'}`}
-                    >
-                        <div className="relative">
-                            <input
-                                type="search"
-                                value={searchQuery}
-                                onChange={(e) => setSearchQuery(e.target.value)}
-                                placeholder="بحث..."
-                                className="border border-gray-300 dark:border-gray-600 rounded-full px-4 py-2 pr-10 w-64 focus:outline-none focus:ring-2 focus:ring-green-500 dark:focus:ring-yellow-400 dark:bg-gray-700 dark:text-white"
-                                disabled={isSearching}
-                            />
-                            <button
-                                type="submit"
-                                disabled={isSearching}
-                                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-green-600"
-                            >
-                                {isSearching ? (
-                                    <div className="w-5 h-5 border-t-2 border-green-500 border-solid rounded-full animate-spin" />
-                                ) : (
-                                    <FiSearch className="w-5 h-5" />
-                                )}
-                            </button>
-                        </div>
-                    </form>
                 </nav>
             </header>
         </>

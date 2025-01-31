@@ -17,8 +17,8 @@ const AllNewsPage = () => {
     useEffect(() => {
         const fetchNews = async () => {
             try {
-                const response = await axios.get('https://ditq.org/api/indexAPI');
-                const allNews = response?.data?.newss || [];
+                const response = await axios.get('https://api.ditq.org/api/news/API');
+                const allNews = response?.data || [];
                 setNews(allNews.reverse());
                 // Store in localStorage
                 localStorage.setItem('allNews', JSON.stringify(allNews));

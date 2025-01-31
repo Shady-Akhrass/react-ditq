@@ -18,10 +18,10 @@ const Footer = () => {
             <h3 className="text-xl font-bold mb-4 font-arabic text-white">روابط سريعة</h3>
             <ul className="space-y-2">
               <li><a href="/" className="text-sm hover:text-white transition-colors">الرئيسية</a></li>
-              <li><a href="/courses" className="text-sm hover:text-white transition-colors">الدورات</a></li>
-              <li><a href="/teachers" className="text-sm hover:text-white transition-colors">المعلمون</a></li>
-              <li><a href="/about" className="text-sm hover:text-white transition-colors">من نحن</a></li>
-              <li><a href="/contact" className="text-sm hover:text-white transition-colors">تواصل معنا</a></li>
+              <li><a href="/course" className="text-sm hover:text-white transition-colors">قسم الدورات والتجويد والأسانيد</a></li>
+              <li><a href="/clues" className="text-sm hover:text-white transition-colors">أدلة الدار</a></li>
+              <li><a href="/speech" className="text-sm hover:text-white transition-colors">كلمة رئيس الدار</a></li>
+              <li><a href="/contact-us" className="text-sm hover:text-white transition-colors">تواصل معنا</a></li>
             </ul>
           </div>
 

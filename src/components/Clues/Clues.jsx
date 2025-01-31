@@ -21,7 +21,7 @@ const Clue = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    axios.get('https://ditq.org/api/clues/API')
+    axios.get('https://api.ditq.org/api/clues/API')
       .then(response => {
         // Handle the nested structure of the response
         const clueData = response.data.clues || [];
@@ -131,7 +131,7 @@ const Clue = () => {
             <div key={clue.id} className="bg-white rounded-xl shadow-sm overflow-hidden mb-8">
               {clue.pdf && (
                 <iframe
-                  src={`https://ditq.org/storage/${clue.pdf}`}
+                  src={`https://api.ditq.org/storage/${clue.pdf}`}
                   className="w-full h-[800px]"
                   title={`Clue PDF ${clue.id}`}
                 />

@@ -27,7 +27,7 @@ const MemorizationSection = () => {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        axios.get('https://ditq.org/api/memorization/API')
+        axios.get('https://api.ditq.org/api/memorization/API')
             .then(response => {
                 const memorizationData = Array.isArray(response.data) ? response.data : [response.data];
                 setMemorization(memorizationData);
@@ -63,7 +63,7 @@ const MemorizationSection = () => {
                 <meta property="og:description" content={metaDescription} />
                 <meta property="og:type" content="website" />
                 {memorization.length > 0 && memorization[0].memorization_images && memorization[0].memorization_images.length > 0 && (
-                    <meta property="og:image" content={`https://ditq.org/storage/${memorization[0].memorization_images[0].image}`} />
+                    <meta property="og:image" content={`https://api.ditq.org/storage/${memorization[0].memorization_images[0].image}`} />
                 )}
             </Helmet>
             <style>{carouselStyles}</style>
@@ -132,7 +132,7 @@ const MemorizationSection = () => {
                                     {item.memorization_images.map(image => (
                                         <div key={image.id} className="relative aspect-video">
                                             <img
-                                                src={`https://ditq.org/storage/${image.image}`}
+                                                src={`https://api.ditq.org/storage/${image.image}`}
                                                 alt="Memorization"
                                                 className="w-full h-full object-cover"
                                             />

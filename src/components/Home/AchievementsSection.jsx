@@ -15,7 +15,7 @@ const AchievementsSection = () => {
     });
 
     useEffect(() => {
-        fetch('https://ditq.org/api/indexAPI')
+        fetch('https://api.ditq.org/api/home/API')
             .then(res => res.json())
             .then(data => setAchievements(data.homes))
             .catch(error => console.error("Error fetching achievements:", error));
@@ -63,7 +63,7 @@ const AchievementsSection = () => {
                     initial={{ opacity: 0, y: -20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6 }}
-                    className="text-4xl font-bold text-center mb-12 text-emerald-900 font-arabic"
+                    className="text-4xl font-bold text-center mb-16 text-emerald-900 font-arabic"
                 >
                     إنجازات الدار
                 </motion.h2>
