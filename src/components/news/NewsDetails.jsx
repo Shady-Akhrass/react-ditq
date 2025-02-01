@@ -69,7 +69,30 @@ const NewsDetails = () => {
                 }
             }
         } catch (error) {
-            setError("Error fetching news details");
+            try {
+                // Check if the title parameter is a number (ID)
+                const isId = !isNaN(title);
+                const endpoint = isId
+                    ? `https://api.ditq.org/api/news/${title}/details/API`
+                    : `https://api.ditq.org/api/news/${title}/details/API`;
+
+                const response = await axios.get(endpoint);
+                if (response?.data) {
+                    // If using ID URL, redirect to title URL
+                    if (isId) {
+                        const titleSlug = response.data.title
+                            .replace(/\s+/g, '-')
+                            .replace(/-+/g, '-');
+                        navigate(`/news/${titleSlug}/details`, { replace: true });
+                    } else {
+                        setNewsItem(response.data);
+                    }
+                } else {
+                    setError("Error fetching news details");
+                }
+            } catch (secondError) {
+                setError("Error fetching news details");
+            }
         } finally {
             setLoading(false);
             setTimeout(() => setIsVisible(true), 100);
@@ -100,7 +123,7 @@ const NewsDetails = () => {
                 const id = window.location.pathname.split('/')[1];
                 const cachedNews = JSON.parse(localStorage.getItem('allNews') || '[]');
                 const newsItem = cachedNews.find(news => news.id.toString() === id);
-                
+
                 if (newsItem) {
                     const titleSlug = newsItem.title
                         .replace(/\s+/g, '-')

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, memo, useCallback } from 'react';
+import React, { useEffect, useState, memo } from 'react';
 import axios from 'axios';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
@@ -27,47 +27,33 @@ class ErrorBoundary extends React.Component {
     }
 }
 
-// Optimized VideoFrame component that only loads when visible
 const VideoFrame = memo(({ src, title, className }) => {
-    const [isVisible, setIsVisible] = useState(false);
-    const frameRef = React.useRef();
-
-    useEffect(() => {
-        const observer = new IntersectionObserver(
-            ([entry]) => {
-                if (entry.isIntersecting) {
-                    setIsVisible(true);
-                    observer.disconnect();
-                }
-            },
-            { threshold: 0.1 }
-        );
-
-        if (frameRef.current) {
-            observer.observe(frameRef.current);
-        }
-
-        return () => observer.disconnect();
-    }, []);
-
+    // Add privacy-enhanced mode to YouTube URLs
+    const getEnhancedPrivacyUrl = (url) => {
+      if (url.includes('youtube.com') || url.includes('youtu.be')) {
+        // Convert URL to embed format if it's not already
+        const videoId = url.includes('embed') 
+          ? url.split('/').pop()
+          : url.split('v=')[1]?.split('&')[0];
+        
+        return `https://www.youtube-nocookie.com/embed/${videoId}`;
+      }
+      return url;
+    };
+  
     return (
-        <div ref={frameRef} className={className}>
-            {isVisible ? (
-                <iframe
-                    src={src}
-                    title={title}
-                    className="w-full h-full"
-                    frameBorder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                    loading="lazy"
-                />
-            ) : (
-                <div className="w-full h-full bg-gray-200 animate-pulse" />
-            )}
-        </div>
+      <iframe
+        className={className}
+        src={getEnhancedPrivacyUrl(src)}
+        frameBorder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowFullScreen
+        title={title}
+        loading="lazy"
+        referrerPolicy="no-referrer-when-downgrade"
+      />
     );
-});
+  });
 
 const YouTubeSectionContent = memo(() => {
     const [videos, setVideos] = useState([]);

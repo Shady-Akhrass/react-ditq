@@ -40,7 +40,7 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <HelmetProvider>
         <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-          <div className="font-sans leading-normal tracking-normal">
+          <div className="font-sans leading-normal tracking-normal flex flex-col min-h-screen">
             <Header />
             <main>
               <Routes>

@@ -20,7 +20,15 @@ module.exports = {
           light: '#fde68a', // yellow
           DEFAULT: '#fbbf24',
         }
-      }
+      },
+      utilities: {
+        '.content-visibility-auto': {
+          'content-visibility': 'auto',
+        },
+        '.contain-intrinsic-size-[500px]': {
+          'contain-intrinsic-size': '500px',
+        },
+      },
     },
   },
   plugins: [],

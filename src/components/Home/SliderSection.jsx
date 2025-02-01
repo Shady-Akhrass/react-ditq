@@ -1,48 +1,24 @@
-import React, { useEffect, useState, useCallback, memo } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { Helmet } from 'react-helmet';
 
-// Memoized image component
-const OptimizedImage = memo(({ src, alt }) => {
-    const [loaded, setLoaded] = useState(false);
-
-    return (
-        <img
-            src={src}
-            alt={alt}
-            className={`w-full h-full object-cover transition-opacity duration-300 ${loaded ? 'opacity-100' : 'opacity-0'
-                }`}
-            onLoad={() => setLoaded(true)}
-            loading="lazy"
-        />
-    );
-});
-
 const ImageSlider = () => {
     const [images, setImages] = useState([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const controller = new AbortController();
-
-        axios.get('https://api.ditq.org/api/home/API', {
-            signal: controller.signal
-        })
+        axios.get('https://api.ditq.org/api/home/API')
             .then((response) => {
                 setImages(response.data.images);
                 setLoading(false);
             })
             .catch((error) => {
-                if (!axios.isCancel(error)) {
-                    console.error("Error fetching images:", error);
-                    setLoading(false);
-                }
+                console.error("Error fetching images:", error);
+                setLoading(false);
             });
-
-        return () => controller.abort();
     }, []);
 
     const settings = {
@@ -62,48 +38,63 @@ const ImageSlider = () => {
         customPaging: (i) => (
             <div className="w-full h-[3px] bg-white/50 rounded-full"></div>
         ),
-        lazyLoad: true,
-        initialSlide: 0,
-        swipeToSlide: true
     };
-
-    if (loading) {
-        return (
-            <div className="w-full h-screen bg-gray-100 animate-pulse" />
-        );
-    }
 
     return (
         <>
             <Helmet>
                 <title>دار الإتقان - الصفحة الرئيسية</title>
                 <meta name="description" content="الصفحة الرئيسية لدار الإتقان للقرآن الكريم" />
-                {/* Preload first image */}
-                {images[0] && (
-                    <link rel="preload" as="image" href={images[0].image} />
-                )}
             </Helmet>
-            <section className="relative w-full h-auto">
-                {/* Mobile View */}
-                <div className="block md:hidden w-full h-[50vh]">
-                    {images[0] && (
-                        <OptimizedImage src={images[0].image} alt="Featured Image" />
+            <section className="relative w-full">
+                {/* Mobile View - Optimized single image */}
+                <div className="block md:hidden w-full relative" 
+                    style={{ aspectRatio: '4/3' }}>
+                    {loading ? (
+                        <div className="flex justify-center items-center h-full w-full">
+                            <div className="w-full h-full animate-pulse"></div>
+                        </div>
+                    ) : (
+                        images[0] && (
+                            <img
+                                src={images[0].image}
+                                alt="Featured"
+                                className="w-full h-full object-cover"
+                                loading="eager"
+                                fetchpriority="high" 
+                                sizes="100vw"
+                                style={{ 
+                                    contentVisibility: 'auto',
+                                    containIntrinsicSize: '100vw'
+                                }}
+                            />
+                        )
                     )}
                 </div>
 
-                {/* Desktop Slider */}
+                {/* Desktop Slider - Load only on desktop */}
                 <div className="hidden md:block w-full h-screen overflow-hidden">
-                    <Slider {...settings}>
-                        {images.map((item) => (
-                            <div key={item.id} className="w-full h-screen">
-                                <OptimizedImage src={item.image} alt={`Slide ${item.id}`} />
-                            </div>
-                        ))}
-                    </Slider>
+                    {loading ? (
+                        <div className="flex justify-center items-center h-full w-full">
+                            <div className="w-full h-full bg-gray-300 animate-pulse"></div>
+                        </div>
+                    ) : (
+                        <Slider {...settings} className="w-full h-full overflow-hidden">
+                            {images.map((item) => (
+                                <div key={item.id} className="w-full h-screen">
+                                    <img
+                                        src={item.image}
+                                        alt={`Slide ${item.id}`}
+                                        className="w-full h-full object-cover"
+                                    />
+                                </div>
+                            ))}
+                        </Slider>
+                    )}
                 </div>
             </section>
         </>
     );
 };
 
-export default memo(ImageSlider);
+export default ImageSlider;
