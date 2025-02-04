@@ -203,4 +203,39 @@
     @apply bg-gray-800/80;
     box-shadow: inset 0 0 20px rgba(250, 204, 21, 0.05);
   }
+
+  /* Content containment rules */
+  section {
+    contain: content;
+    content-visibility: auto;
+    contain-intrinsic-size: 0 500px;
+  }
+
+  /* Prevent layout shift for images */
+  img {
+    aspect-ratio: attr(width) / attr(height);
+    @apply max-w-full h-auto;
+    content-visibility: auto;
+    contain: content;
+  }
+
+  /* Add smooth height transitions */
+  .section-wrapper {
+    transition: height 0.3s ease-in-out;
+  }
+
+  /* Container defaults */
+  .container {
+    @apply mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  /* Section spacing */
+  .section-content {
+    @apply py-8 md:py-12;
+  }
+
+  /* Prevent layout shift for loading states */
+  .section-placeholder {
+    @apply min-h-[300px] md:min-h-[400px];
+  }
 }

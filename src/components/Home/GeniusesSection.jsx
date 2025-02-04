@@ -1,43 +1,64 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, memo } from 'react';
+import axios from 'axios';
+import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet';
+import { lowQualityCompress } from '../hooks/CompressImage';
 
-const SkeletonCard = () => (
-  <div className="w-full min-h-[500px] rounded-xl border-2 shadow-lg overflow-hidden transition-all duration-300 hover:scale-[1.02] bg-white">
-    <div className="flex flex-col md:flex-row h-full">
-      <div className="w-full md:w-2/5 h-48 md:h-auto bg-gray-200 animate-pulse">
-        <div className="w-full h-full relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 skeleton-shine" />
-        </div>
-      </div>
-      
-      <div className="flex-grow p-4 md:p-10">
-        <div className="flex flex-col items-center justify-start h-full space-y-6 md:space-y-8">
-          <div className="w-3/4 h-8 bg-gray-200 rounded-lg animate-pulse">
-            <div className="w-full h-full relative overflow-hidden">
-              <div className="absolute inset-0 bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 skeleton-shine" />
-            </div>
-          </div>
-          
-          <div className="space-y-4 w-full">
-            {[1, 2, 3].map((i) => (
-              <div key={i} className="w-full h-4 bg-gray-200 rounded animate-pulse">
+// Memoize the SkeletonCard component
+const SkeletonCard = memo(() => (
+    <div className="w-full min-h-[500px] rounded-xl border-2 shadow-lg overflow-hidden transition-all duration-300 hover:scale-[1.02] bg-white">
+        <div className="flex flex-col md:flex-row h-full">
+            <div className="w-full md:w-2/5 h-48 md:h-auto bg-gray-200 animate-pulse">
                 <div className="w-full h-full relative overflow-hidden">
-                  <div className="absolute inset-0 bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 skeleton-shine" />
+                    <div className="absolute inset-0 bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 skeleton-shine" />
                 </div>
-              </div>
-            ))}
-          </div>
-          
-          <div className="w-32 md:w-48 h-12 bg-gray-200 rounded-lg animate-pulse">
-            <div className="w-full h-full relative overflow-hidden">
-              <div className="absolute inset-0 bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 skeleton-shine" />
             </div>
-          </div>
+
+            <div className="flex-grow p-4 md:p-10">
+                <div className="flex flex-col items-center justify-start h-full space-y-6 md:space-y-8">
+                    <div className="w-3/4 h-8 bg-gray-200 rounded-lg animate-pulse">
+                        <div className="w-full h-full relative overflow-hidden">
+                            <div className="absolute inset-0 bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 skeleton-shine" />
+                        </div>
+                    </div>
+
+                    <div className="space-y-4 w-full">
+                        {[1, 2, 3].map((i) => (
+                            <div key={i} className="w-full h-4 bg-gray-200 rounded animate-pulse">
+                                <div className="w-full h-full relative overflow-hidden">
+                                    <div className="absolute inset-0 bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 skeleton-shine" />
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+
+                    <div className="w-32 md:w-48 h-12 bg-gray-200 rounded-lg animate-pulse">
+                        <div className="w-full h-full relative overflow-hidden">
+                            <div className="absolute inset-0 bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 skeleton-shine" />
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
-);
+));
+
+// Memoize the card content component
+const GeniusCardContent = memo(({ genius, isExpanded, onExpand }) => (
+    <div className="flex flex-col items-center justify-start h-full w-full max-w-3xl mx-auto py-4 md:py-0 space-y-6 md:space-y-8">
+        <h3 className="font-semibold text-xl md:text-3xl">
+            {genius.name}
+        </h3>
+        <p className={`text-base md:text-lg text-gray-600 leading-relaxed max-w-screen-2xl ${!isExpanded ? 'line-clamp-3' : ''}`}>
+            {genius.details}
+        </p>
+        {!isExpanded && (
+            <div className="w-32 md:w-48 bg-green-600 text-white text-center py-3 md:py-4 rounded-lg hover:bg-green-700 transition-colors text-sm md:text-base">
+                عرض القصة
+            </div>
+        )}
+    </div>
+));
 
 const GeniusesSection = () => {
     const [geniuses, setGeniuses] = useState([]);
@@ -45,20 +66,62 @@ const GeniusesSection = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [isExpanded, setIsExpanded] = useState(false);
     const [expandedGenius, setExpandedGenius] = useState(null);
+    const [compressedImages, setCompressedImages] = useState({});
     const cardRef = useRef(null);
     const [cardPosition, setCardPosition] = useState({ top: 0, left: 0, width: 0, height: 0 });
     const [clickPosition, setClickPosition] = useState({ x: 0, y: 0 });
 
-    useEffect(() => {
-        fetch('https://api.ditq.org/api/home/API')
-            .then(response => response.json())
-            .then(data => {
-                if (data && data.geniuses) {
-                    setGeniuses(data.geniuses);
+    const compressAndCacheImage = async (imageUrl, id) => {
+        try {
+            const url = imageUrl.replace('https://api.ditq.org', '');
+            const response = await fetch(url, {
+                headers: {
+                    'Accept': 'image/*'
                 }
-            })
-            .catch(error => console.error("Error fetching geniuses:", error))
-            .finally(() => setIsLoading(false));
+            });
+            const blob = await response.blob();
+            const compressedBlob = await lowQualityCompress(blob);
+            const compressedUrl = URL.createObjectURL(compressedBlob);
+            setCompressedImages(prev => ({ ...prev, [id]: compressedUrl }));
+            return compressedUrl;
+        } catch (error) {
+            console.error("Image compression failed:", error);
+            return imageUrl.replace('https://api.ditq.org', '');
+        }
+    };
+
+    useEffect(() => {
+        const fetchGeniuses = async () => {
+            try {
+                const response = await axios.get('/api/home/API', {
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+                const geniusData = response?.data?.geniuses || [];
+                setGeniuses(geniusData);
+
+                geniusData.forEach(genius => {
+                    if (genius.image) {
+                        compressAndCacheImage(genius.image, genius.id);
+                    }
+                });
+            } catch (error) {
+                console.error("Error fetching geniuses:", error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchGeniuses();
+
+        return () => {
+            Object.values(compressedImages).forEach(url => {
+                if (url.startsWith('blob:')) {
+                    URL.revokeObjectURL(url);
+                }
+            });
+        };
     }, []);
 
     useEffect(() => {
@@ -162,7 +225,7 @@ const GeniusesSection = () => {
                             }}
                         >
                             <div className={`
-                                transition-all duration-500 ease-out overflow-hidden
+                                relative transition-all duration-500 ease-out overflow-hidden
                                 order-1 md:order-3
                                 ${isExpanded
                                     ? 'w-full h-[30vh] md:w-1/2 md:h-full'
@@ -170,9 +233,12 @@ const GeniusesSection = () => {
                                 }
                             `}>
                                 <img
-                                    src={isExpanded ? expandedGenius.image : currentGenius.image}
-                                    alt={isExpanded ? expandedGenius.name : currentGenius.name}
+                                    src={compressedImages[isExpanded ? expandedGenius?.id : currentGenius?.id] || (isExpanded ? expandedGenius?.image : currentGenius?.image)}
+                                    alt={isExpanded ? expandedGenius?.name : currentGenius?.name}
                                     className="w-full h-full object-cover"
+                                    width="800"
+                                    height="600"
+                                    loading="lazy"
                                 />
                             </div>
 
@@ -194,24 +260,16 @@ const GeniusesSection = () => {
                             <div className={`
                                 flex flex-col justify-start p-4 md:p-10 transition-all duration-500
                                 order-3 md:order-2
-                                ${isExpanded 
+                                ${isExpanded
                                     ? 'w-full h-[70vh] md:w-1/2 md:h-full overflow-y-auto pb-20'
                                     : 'flex-grow'
                                 }
                             `}>
-                                <div className="flex flex-col items-center justify-start h-full w-full max-w-3xl mx-auto py-4 md:py-0 space-y-6 md:space-y-8">
-                                    <h3 className="font-semibold text-xl md:text-3xl">
-                                        {isExpanded ? expandedGenius.name : currentGenius.name}
-                                    </h3>
-                                    <p className="text-base md:text-lg text-gray-600 leading-relaxed max-w-screen-2xl">
-                                        {isExpanded ? expandedGenius.details : currentGenius.details}
-                                    </p>
-                                    {!isExpanded && (
-                                        <div className="w-32 md:w-48 bg-green-600 text-white text-center py-3 md:py-4 rounded-lg hover:bg-green-700 transition-colors text-sm md:text-base">
-                                            عرض القصة
-                                        </div>
-                                    )}
-                                </div>
+                                <GeniusCardContent
+                                    genius={isExpanded ? expandedGenius : currentGenius}
+                                    isExpanded={isExpanded}
+                                    onExpand={handleExpand}
+                                />
                             </div>
 
                             {isExpanded && (
@@ -233,4 +291,4 @@ const GeniusesSection = () => {
     );
 }
 
-export default GeniusesSection;
+export default memo(GeniusesSection);

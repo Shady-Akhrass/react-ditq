@@ -4,21 +4,68 @@ import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { Helmet } from 'react-helmet';
+import { highQualityCompress } from '../hooks/CompressImage';
 
 const ImageSlider = () => {
     const [images, setImages] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [compressedImages, setCompressedImages] = useState([]);
+
+    const compressAndCreateObjectURL = async (imageUrl) => {
+        try {
+            // Convert absolute URLs to relative ones for proxy
+            const url = imageUrl.replace('https://api.ditq.org', '');
+            const response = await fetch(url, {
+                mode: 'cors',
+                headers: {
+                    'Accept': 'image/*'
+                }
+            });
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            
+            const blob = await response.blob();
+            return imageUrl; // Return original URL if compression fails
+        } catch (error) {
+            console.error("Error fetching image:", error);
+            return imageUrl; // Return original URL as fallback
+        }
+    };
 
     useEffect(() => {
-        axios.get('https://api.ditq.org/api/home/API')
-            .then((response) => {
-                setImages(response.data.images);
-                setLoading(false);
-            })
-            .catch((error) => {
-                console.error("Error fetching images:", error);
-                setLoading(false);
+        axios.get('/api/home/API', {
+            headers: {
+                'Accept': 'application/json'
+            }
+        })
+        .then(async (response) => {
+            const imageData = response.data.images || [];
+            setImages(imageData);
+
+            const compressed = await Promise.all(
+                imageData.map(async (item) => ({
+                    ...item,
+                    compressedUrl: await compressAndCreateObjectURL(item.image)
+                }))
+            );
+            setCompressedImages(compressed);
+            setLoading(false);
+        })
+        .catch((error) => {
+            console.error("Error fetching images:", error);
+            setLoading(false);
+        });
+
+        // Cleanup function
+        return () => {
+            compressedImages.forEach(item => {
+                if (item.compressedUrl.startsWith('blob:')) {
+                    URL.revokeObjectURL(item.compressedUrl);
+                }
             });
+        };
     }, []);
 
     const settings = {
@@ -48,22 +95,22 @@ const ImageSlider = () => {
             </Helmet>
             <section className="relative w-full">
                 {/* Mobile View - Optimized single image */}
-                <div className="block md:hidden w-full relative" 
+                <div className="block md:hidden w-full relative"
                     style={{ aspectRatio: '4/3' }}>
                     {loading ? (
                         <div className="flex justify-center items-center h-full w-full">
                             <div className="w-full h-full animate-pulse"></div>
                         </div>
                     ) : (
-                        images[0] && (
+                        compressedImages[0] && (
                             <img
-                                src={images[0].image}
+                                src={compressedImages[0].compressedUrl}
                                 alt="Featured"
                                 className="w-full h-full object-cover"
                                 loading="eager"
-                                fetchpriority="high" 
+                                fetchpriority="high"
                                 sizes="100vw"
-                                style={{ 
+                                style={{
                                     contentVisibility: 'auto',
                                     containIntrinsicSize: '100vw'
                                 }}
@@ -80,10 +127,10 @@ const ImageSlider = () => {
                         </div>
                     ) : (
                         <Slider {...settings} className="w-full h-full overflow-hidden">
-                            {images.map((item) => (
+                            {compressedImages.map((item) => (
                                 <div key={item.id} className="w-full h-screen">
                                     <img
-                                        src={item.image}
+                                        src={item.compressedUrl}
                                         alt={`Slide ${item.id}`}
                                         className="w-full h-full object-cover"
                                     />

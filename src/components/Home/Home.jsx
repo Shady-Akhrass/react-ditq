@@ -43,7 +43,7 @@ const Home = () => {
           <SectionWrapper>
             <SliderSection />
           </SectionWrapper>
-          
+
           <div className="space-y-8">
             {[
               { Component: NewsSection, id: 'news' },

@@ -133,6 +133,10 @@ const NewsCard = ({ newsItem, generateDetailsUrl }) => {
         navigate(generateDetailsUrl());
     };
 
+    const formattedDate = newsItem?.created_at
+        ? new Date(newsItem.created_at).toLocaleDateString('en-PS')
+        : 'تاريخ غير متوفر';
+
     return (
         <div
             onClick={handleClick}
@@ -142,14 +146,16 @@ const NewsCard = ({ newsItem, generateDetailsUrl }) => {
         >
             <div className="h-[50%]">
                 <img
-                    src={newsItem.image}
+                    src={newsItem.image || '/placeholder-image.jpg'}
                     alt={newsItem.title}
                     className="w-full h-full object-cover"
                 />
             </div>
             <div className="p-4 flex flex-col h-[50%]">
-                <h3 className="text-lg font-bold text-gray-900 mb-2 h-[50%] overflow-hidden text-center">{newsItem.title}</h3>
-                <p className="text-gray-600 text-sm mb-4 text-center">{newsItem.created_at.slice(0, 10)}</p>
+                <h3 className="text-lg font-bold text-gray-900 mb-2 h-[50%] overflow-hidden text-center">
+                    {newsItem.title || 'عنوان غير متوفر'}
+                </h3>
+                <p className="text-gray-600 text-sm mb-4 text-center">{formattedDate}</p>
                 <button className="bg-green-500 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-lg shadow-md w-full transition-all duration-300 ease-in-out mt-auto">
                     عرض التفاصيل
                 </button>

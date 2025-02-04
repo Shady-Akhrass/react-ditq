@@ -5,6 +5,7 @@ import { X } from 'lucide-react';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 import { Helmet } from 'react-helmet';
+import { lowQualityCompress } from '../hooks/CompressImage';
 
 const ProjectsSection = () => {
     const [projects, setProjects] = useState([]);
@@ -12,16 +13,62 @@ const ProjectsSection = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedProject, setSelectedProject] = useState(null);
+    const [compressedImages, setCompressedImages] = useState({});
+
+    const compressAndCacheImage = async (imageUrl, id) => {
+        try {
+            const url = imageUrl.replace('https://api.ditq.org', '');
+            const response = await fetch(url, {
+                headers: {
+                    'Accept': 'image/*'
+                }
+            });
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            
+            const blob = await response.blob();
+            const compressedBlob = await lowQualityCompress(blob);
+            const compressedUrl = URL.createObjectURL(compressedBlob);
+            setCompressedImages(prev => ({ ...prev, [id]: compressedUrl }));
+            return compressedUrl;
+        } catch (error) {
+            console.error("Image compression failed:", error);
+            return imageUrl.replace('https://api.ditq.org', '');
+        }
+    };
 
     useEffect(() => {
-        axios.get('https://api.ditq.org/api/home/API')
-            .then((response) => {
-                setProjects(response.data.donate || []);
-            })
-            .catch((error) => {
-                console.error("Error fetching projects:", error);
-            })
-            .finally(() => setIsLoading(false));
+        axios.get('/api/home/API', {
+            headers: {
+                'Accept': 'application/json'
+            }
+        })
+        .then((response) => {
+            const projectsData = response.data.donate || [];
+            setProjects(projectsData);
+            
+            // Compress images in parallel
+            projectsData.forEach(project => {
+                if (project.image) {
+                    compressAndCacheImage(project.image, project.id);
+                }
+            });
+        })
+        .catch((error) => {
+            console.error("Error fetching projects:", error);
+        })
+        .finally(() => setIsLoading(false));
+
+        return () => {
+            // Cleanup compressed image URLs
+            Object.values(compressedImages).forEach(url => {
+                if (url.startsWith('blob:')) {
+                    URL.revokeObjectURL(url);
+                }
+            });
+        };
     }, []);
 
     useEffect(() => {
@@ -147,7 +194,7 @@ const ProjectsSection = () => {
                                     {/* Modal content update */}
                                     <motion.div className="md:w-1/2 relative overflow-hidden group h-full">
                                         <motion.img
-                                            src={currentProject?.image || 'placeholder-image-url'}
+                                            src={compressedImages[currentProject?.id] || currentProject?.image || 'placeholder-image-url'}
                                             alt={currentProject?.title}
                                             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                                             loading="lazy"
@@ -200,7 +247,7 @@ const ProjectsSection = () => {
                                     <div className="grid md:grid-cols-2 h-full">
                                         <div className="order-2 md:order-1 h-full p-6 md:p-8 overflow-y-auto flex items-center justify-center">
                                             <motion.img
-                                                src={selectedProject.image}
+                                                src={compressedImages[selectedProject.id] || selectedProject.image}
                                                 alt={selectedProject.title}
                                                 className="w-full h-auto max-h-full object-cover rounded-lg"
                                                 initial={{ opacity: 0 }}
